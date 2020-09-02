@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools">
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="dog"
+            type="ru.magzyumov.dogs.model.response.BreedsResponse.Breed"/>
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/notificationCardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingTop="5dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingStart="@dimen/mainLeftMargin"
+                android:paddingEnd="@dimen/mainRightMargin"
+                android:paddingTop="17dp"
+                android:paddingBottom="15dp"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.1"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/textViewBreed"
+                        android:layout_height="match_parent"
+                        android:layout_width="wrap_content"
+                        android:textSize="20sp"
+                        android:fontFamily="sans-serif"
+                        android:textColor="#333333"
+                        android:layout_gravity="start"
+                        android:gravity="start|center_vertical"
+                        android:text='@{dog.breed}'/>
+                    <TextView
+                        android:id="@+id/textViewSubBreedCount"
+                        android:layout_height="match_parent"
+                        android:layout_width="wrap_content"
+                        android:textSize="20sp"
+                        android:fontFamily="sans-serif"
+                        android:textColor="#333333"
+                        android:layout_marginStart="10dp"
+                        android:gravity="start"
+                        android:layout_gravity="start"
+                        android:visibility="@{(dog.subBreeds.size()>0) ? View.VISIBLE : View.GONE}"
+                        android:text='@{"(" + dog.subBreeds.size() + " subbreeds)"}'/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.9"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:id="@+id/imageViewArrow"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_arrow_right_24dp"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/separator_horizontal"/>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+</layout>
