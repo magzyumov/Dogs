@@ -9,7 +9,7 @@
     </data>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/notificationCardView"
+        android:id="@+id/cardViewImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="20dp"

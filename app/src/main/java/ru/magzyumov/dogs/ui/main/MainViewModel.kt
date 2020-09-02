@@ -51,4 +51,8 @@ class MainViewModel @Inject constructor(
         return dogsRepository.getImagesForBreed(breed)
     }
 
+    fun getImagesForBreed(breed: String, subBreed: String): LiveData<BreedImages>{
+        return dogsRepository.getImagesForBreed(breed, subBreed)
+    }
+
 }

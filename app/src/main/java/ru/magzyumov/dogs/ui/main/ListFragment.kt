@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import ru.magzyumov.dogs.App
 import ru.magzyumov.dogs.R
 import ru.magzyumov.dogs.model.response.BreedsResponse.*
+import ru.magzyumov.dogs.util.NULL_SUB_BREED
 import javax.inject.Inject
 
 
@@ -45,6 +46,9 @@ class ListFragment: Fragment(), BreedAdapter.Interaction {
 
         requireActivity().toolbar.title = "Breeds"
 
+        mainContentFrame.visibility = View.GONE
+        progressBarFrame.visibility = View.VISIBLE
+
         initRecyclerView()
         observerLiveData()
     }
@@ -55,6 +59,8 @@ class ListFragment: Fragment(), BreedAdapter.Interaction {
             listOfBreeds?.let {
                 allBreeds = listOfBreeds
                 breedAdapter.swap(it)
+                mainContentFrame.visibility = View.VISIBLE
+                progressBarFrame.visibility = View.GONE
             }
         })
     }
@@ -68,10 +74,14 @@ class ListFragment: Fragment(), BreedAdapter.Interaction {
     }
 
     override fun onItemSelected(position: Int, item: Breed) {
-
-        val navDirection = ListFragmentDirections
-            .actionNavigationListToNavigationImages(item.breed.toLowerCase())
-
-        findNavController().navigate(navDirection)
+        if (item.subBreeds.isEmpty()){
+            val navDirection = ListFragmentDirections
+                .actionNavigationListToNavigationImages(item.breed.toLowerCase(), NULL_SUB_BREED)
+            findNavController().navigate(navDirection)
+        } else {
+            val navDirection = ListFragmentDirections
+                .actionNavigationListToNavigationSubBreed(item.breed.toLowerCase())
+            findNavController().navigate(navDirection)
+        }
     }
 }

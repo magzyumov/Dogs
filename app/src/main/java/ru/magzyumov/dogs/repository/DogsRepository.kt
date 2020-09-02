@@ -116,10 +116,9 @@ class DogsRepository @Inject constructor(val dogsDao: IDogsDao, val dogsRequest:
     private val parseSubBreeds: Function1<BreedsResponse, SubBreeds> =
         { allSubBreeds: BreedsResponse ->
 
-            val list = allSubBreeds.message.toString()
+            var list = allSubBreeds.message.toString()
                 .replace("\\[|\\]".toRegex(),"")
                 .trim()
-                .capitalize()
                 .splitToSequence(", ")
                 .filter { it.isNotBlank() }
                 .toList()
@@ -131,6 +130,24 @@ class DogsRepository @Inject constructor(val dogsDao: IDogsDao, val dogsRequest:
     fun getImagesForBreed(breed: String): LiveData<BreedImages> {
         val result: MutableLiveData<BreedImages> = MutableLiveData()
         dogsRequest.getImagesForBreed(breed)
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.computation())
+            .map(parseImagesForBreed)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object: DisposableSingleObserver<BreedImages>() {
+                override fun onSuccess(breedImages: BreedImages) {
+                    result.value = breedImages
+                }
+                override fun onError(e: Throwable) {
+                    Log.e("GetImagesForBreed", e.localizedMessage.orEmpty())
+                }
+            })
+        return result
+    }
+
+    fun getImagesForBreed(breed: String, subBreed: String): LiveData<BreedImages> {
+        val result: MutableLiveData<BreedImages> = MutableLiveData()
+        dogsRequest.getImagesForBreed(breed, subBreed)
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.computation())
             .map(parseImagesForBreed)

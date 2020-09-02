@@ -29,6 +29,9 @@
         <argument
             android:name="breedName"
             app:argType="string" />
+        <argument
+            android:name="subBreedName"
+            app:argType="string" />
     </fragment>
 
     <fragment
@@ -38,6 +41,9 @@
         <argument
             android:name="breedName"
             app:argType="string" />
+        <action
+            android:id="@+id/action_navigation_subBreed_to_navigation_images"
+            app:destination="@id/navigation_images" />
     </fragment>
 
 

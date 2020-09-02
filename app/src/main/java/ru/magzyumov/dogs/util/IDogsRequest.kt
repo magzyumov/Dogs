@@ -18,6 +18,10 @@ interface IDogsRequest {
     @GET("breed/{breed}/images")
     fun getImagesForBreed(@Path ("breed") breed: String): Single<BreedsResponse>
 
+    @GET("breed/{breed}/{subBreed}/images")
+    fun getImagesForBreed(  @Path ("breed") breed: String,
+                            @Path ("subBreed") subBreed: String): Single<BreedsResponse>
+
     companion object Factory {
         fun create(): IDogsRequest {
             val retrofit = retrofit2.Retrofit.Builder()

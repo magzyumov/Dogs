@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import ru.magzyumov.dogs.App
 import ru.magzyumov.dogs.R
 import ru.magzyumov.dogs.ui.adapter.ImageAdapter
+import ru.magzyumov.dogs.util.NULL_SUB_BREED
 import javax.inject.Inject
 
 
@@ -45,8 +46,6 @@ class ImagesFragment: Fragment(), ImageAdapter.Interaction {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        requireActivity().toolbar.title = "Images"
-
         prepareArguments()
         initRecyclerView()
         observerLiveData()
@@ -59,12 +58,27 @@ class ImagesFragment: Fragment(), ImageAdapter.Interaction {
     }
 
     private fun observerLiveData() {
-        mainViewModel.getImagesForBreed(safeArgs.breedName).observe(viewLifecycleOwner, Observer { listOfImages ->
-            listOfImages?.let {
-                allImages = it.images
-                imageAdapter.swap(it.images)
+        when(safeArgs.subBreedName){
+            NULL_SUB_BREED -> {
+                mainViewModel.getImagesForBreed(safeArgs.breedName).observe(viewLifecycleOwner, Observer { listOfImages ->
+                    listOfImages?.let {
+                        allImages = it.images
+                        imageAdapter.swap(it.images)
+                    }
+                })
+                requireActivity().toolbar.title = safeArgs.breedName.capitalize()
             }
-        })
+            else -> {
+                mainViewModel.getImagesForBreed(safeArgs.breedName, safeArgs.subBreedName).observe(viewLifecycleOwner, Observer { listOfImages ->
+                    listOfImages?.let {
+                        allImages = it.images
+                        imageAdapter.swap(it.images)
+                    }
+                })
+                requireActivity().toolbar.title = safeArgs.subBreedName.capitalize()
+            }
+        }
+
     }
 
     private fun initRecyclerView() {
