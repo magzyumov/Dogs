@@ -1,6 +1,10 @@
 package ru.magzyumov.dogs.di
 
 import dagger.Component
+import ru.magzyumov.dogs.ui.fragments.FavouritesFragment
+import ru.magzyumov.dogs.ui.fragments.ImagesFragment
+import ru.magzyumov.dogs.ui.fragments.ListFragment
+import ru.magzyumov.dogs.ui.fragments.SubBreedFragment
 import ru.magzyumov.dogs.ui.main.*
 import ru.magzyumov.dogs.util.ResourceManager
 import javax.inject.Singleton
@@ -12,6 +16,8 @@ interface AppComponent {
     fun inject(context: ResourceManager)
 
     fun inject(viewModel: MainViewModel)
+
+    fun inject(mainActivity: MainActivity)
 
     fun inject(listFragment: ListFragment)
     fun inject(imagesFragment: ImagesFragment)

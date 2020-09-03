@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_list"
-        android:name="ru.magzyumov.dogs.ui.main.ListFragment"
+        android:name="ru.magzyumov.dogs.ui.fragments.ListFragment"
         android:label="@string/title_list" >
         <action
             android:id="@+id/action_navigation_list_to_navigation_images"
@@ -19,12 +19,12 @@
 
     <fragment
         android:id="@+id/navigation_favourites"
-        android:name="ru.magzyumov.dogs.ui.main.FavouritesFragment"
+        android:name="ru.magzyumov.dogs.ui.fragments.FavouritesFragment"
         android:label="@string/title_favourites" />
 
     <fragment
         android:id="@+id/navigation_images"
-        android:name="ru.magzyumov.dogs.ui.main.ImagesFragment"
+        android:name="ru.magzyumov.dogs.ui.fragments.ImagesFragment"
         android:label="@string/title_images" >
         <argument
             android:name="breedName"
@@ -36,7 +36,7 @@
 
     <fragment
         android:id="@+id/navigation_subBreed"
-        android:name="ru.magzyumov.dogs.ui.main.SubBreedFragment"
+        android:name="ru.magzyumov.dogs.ui.fragments.SubBreedFragment"
         android:label="@string/title_subBreed" >
         <argument
             android:name="breedName"

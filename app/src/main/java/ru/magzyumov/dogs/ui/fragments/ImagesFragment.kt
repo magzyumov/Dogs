@@ -1,11 +1,11 @@
-package ru.magzyumov.dogs.ui.main
+package ru.magzyumov.dogs.ui.fragments
 
 
+import android.content.Context
 import kotlinx.android.synthetic.main.fragment_images.*
-import ru.magzyumov.dogs.ui.adapter.BreedAdapter
 
 import android.os.Bundle
-import android.provider.ContactsContract
+
 import android.util.Log
 
 import android.view.*
@@ -13,10 +13,11 @@ import androidx.fragment.app.Fragment
 
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.activity_main.*
 import ru.magzyumov.dogs.App
 import ru.magzyumov.dogs.R
 import ru.magzyumov.dogs.ui.adapter.ImageAdapter
+import ru.magzyumov.dogs.ui.main.IFragmentWorker
+import ru.magzyumov.dogs.ui.main.MainViewModel
 import ru.magzyumov.dogs.util.NULL_SUB_BREED
 import javax.inject.Inject
 
@@ -29,9 +30,15 @@ class ImagesFragment: Fragment(), ImageAdapter.Interaction {
     private lateinit var imageAdapter: ImageAdapter
     private lateinit var allImages: List<String>
     private lateinit var safeArgs: ImagesFragmentArgs
+    private lateinit var fragmentWorker: IFragmentWorker
 
     init {
         App.getComponent().inject(this)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is IFragmentWorker) fragmentWorker = context
     }
 
     override fun onCreateView(
@@ -46,6 +53,8 @@ class ImagesFragment: Fragment(), ImageAdapter.Interaction {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        fragmentWorker.dataReady(false)
+
         prepareArguments()
         initRecyclerView()
         observerLiveData()
@@ -53,7 +62,7 @@ class ImagesFragment: Fragment(), ImageAdapter.Interaction {
 
     private fun prepareArguments() {
         arguments?.let {
-            safeArgs = ImagesFragmentArgs.fromBundle( it )
+            safeArgs = ImagesFragmentArgs.fromBundle(it)
         }
     }
 
@@ -64,18 +73,20 @@ class ImagesFragment: Fragment(), ImageAdapter.Interaction {
                     listOfImages?.let {
                         allImages = it.images
                         imageAdapter.swap(it.images)
+                        fragmentWorker.dataReady(true)
                     }
                 })
-                requireActivity().toolbar.title = safeArgs.breedName.capitalize()
+                fragmentWorker.changePageTitle(safeArgs.breedName)
             }
             else -> {
                 mainViewModel.getImagesForBreed(safeArgs.breedName, safeArgs.subBreedName).observe(viewLifecycleOwner, Observer { listOfImages ->
                     listOfImages?.let {
                         allImages = it.images
                         imageAdapter.swap(it.images)
+                        fragmentWorker.dataReady(true)
                     }
                 })
-                requireActivity().toolbar.title = safeArgs.subBreedName.capitalize()
+                fragmentWorker.changePageTitle(safeArgs.subBreedName)
             }
         }
 

@@ -17,6 +17,15 @@ import ru.magzyumov.dogs.util.IDogsRequest
 import javax.inject.Inject
 
 class DogsRepository @Inject constructor(val dogsDao: IDogsDao, val dogsRequest: IDogsRequest){
+    private val netWorkStatusLiveData: MutableLiveData<String> = MutableLiveData()
+    private val listOfBreedsLiveData: MutableLiveData<List<Breed>> = MutableLiveData()
+    private val listOfSubBreedsLiveData: MutableLiveData<SubBreeds> = MutableLiveData()
+    private val listOfImagesLiveData: MutableLiveData<BreedImages> = MutableLiveData()
+
+    fun getNetworkStatus(): LiveData<String> = netWorkStatusLiveData
+    fun getListOfBreeds(): LiveData<List<Breed>> = listOfBreedsLiveData
+    fun getListOfSubBreeds(): LiveData<SubBreeds> = listOfSubBreedsLiveData
+    fun getListOfImages(): LiveData<BreedImages> = listOfImagesLiveData
 
     fun insert(garage: DogEntity) {
         CoroutineScope(Dispatchers.IO).launch {
@@ -51,7 +60,6 @@ class DogsRepository @Inject constructor(val dogsDao: IDogsDao, val dogsRequest:
         return dogsDao.getById(id)
     }
 
-
     fun getAllBreeds(): LiveData<List<Breed>> {
         val result: MutableLiveData<List<Breed>> = MutableLiveData()
         dogsRequest.getAllBreedsFromServer()
@@ -65,10 +73,10 @@ class DogsRepository @Inject constructor(val dogsDao: IDogsDao, val dogsRequest:
                 }
 
                 override fun onError(e: Throwable) {
+                    netWorkStatusLiveData.postValue(e.localizedMessage.orEmpty())
                     Log.e("GetAllBreeds", e.localizedMessage.orEmpty())
                 }
             })
-
         return result
     }
 
@@ -107,6 +115,7 @@ class DogsRepository @Inject constructor(val dogsDao: IDogsDao, val dogsRequest:
                     result.value = subBreeds
                 }
                 override fun onError(e: Throwable) {
+                    netWorkStatusLiveData.postValue(e.localizedMessage.orEmpty())
                     Log.e("GetSubBreeds", e.localizedMessage.orEmpty())
                 }
             })
@@ -139,6 +148,7 @@ class DogsRepository @Inject constructor(val dogsDao: IDogsDao, val dogsRequest:
                     result.value = breedImages
                 }
                 override fun onError(e: Throwable) {
+                    netWorkStatusLiveData.postValue(e.localizedMessage.orEmpty())
                     Log.e("GetImagesForBreed", e.localizedMessage.orEmpty())
                 }
             })
@@ -157,6 +167,7 @@ class DogsRepository @Inject constructor(val dogsDao: IDogsDao, val dogsRequest:
                     result.value = breedImages
                 }
                 override fun onError(e: Throwable) {
+                    netWorkStatusLiveData.postValue(e.localizedMessage.orEmpty())
                     Log.e("GetImagesForBreed", e.localizedMessage.orEmpty())
                 }
             })
@@ -175,5 +186,4 @@ class DogsRepository @Inject constructor(val dogsDao: IDogsDao, val dogsRequest:
 
             BreedImages(list)
         }
-
 }

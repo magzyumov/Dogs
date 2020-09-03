@@ -1,5 +1,6 @@
-package ru.magzyumov.dogs.ui.main
+package ru.magzyumov.dogs.ui.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,10 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 
 import ru.magzyumov.dogs.R
+import ru.magzyumov.dogs.ui.main.IFragmentWorker
+import ru.magzyumov.dogs.ui.main.MainViewModel
 
 class FavouritesFragment: Fragment() {
 
     private val mainViewModel: MainViewModel by viewModels()
+
 
     override fun onCreateView(
             inflater: LayoutInflater,

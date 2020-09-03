@@ -1,21 +1,20 @@
-package ru.magzyumov.dogs.ui.main
+package ru.magzyumov.dogs.ui.fragments
 
 
-import ru.magzyumov.dogs.ui.adapter.BreedAdapter
+import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_sub_breeds.*
 import ru.magzyumov.dogs.App
 import ru.magzyumov.dogs.R
-import ru.magzyumov.dogs.model.response.BreedsResponse.*
 import ru.magzyumov.dogs.ui.adapter.SubBreedAdapter
+import ru.magzyumov.dogs.ui.main.IFragmentWorker
+import ru.magzyumov.dogs.ui.main.MainViewModel
 import javax.inject.Inject
 
 
@@ -27,9 +26,15 @@ class SubBreedFragment: Fragment(), SubBreedAdapter.Interaction {
     private lateinit var subBreedAdapter: SubBreedAdapter
     private lateinit var allSubBreeds: List<String>
     private lateinit var safeArgs: SubBreedFragmentArgs
+    private lateinit var fragmentWorker: IFragmentWorker
 
     init {
         App.getComponent().inject(this)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is IFragmentWorker) fragmentWorker = context
     }
 
     override fun onCreateView(
@@ -44,6 +49,8 @@ class SubBreedFragment: Fragment(), SubBreedAdapter.Interaction {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        fragmentWorker.dataReady(false)
+
         prepareArguments()
         initRecyclerView()
         observerLiveData()
@@ -51,9 +58,9 @@ class SubBreedFragment: Fragment(), SubBreedAdapter.Interaction {
 
     private fun prepareArguments() {
         arguments?.let {
-            safeArgs = SubBreedFragmentArgs.fromBundle( it )
+            safeArgs = SubBreedFragmentArgs.fromBundle(it)
         }
-        requireActivity().toolbar.title = safeArgs.breedName.capitalize()
+        fragmentWorker.changePageTitle(safeArgs.breedName)
     }
 
     private fun observerLiveData() {
@@ -61,6 +68,7 @@ class SubBreedFragment: Fragment(), SubBreedAdapter.Interaction {
             listOfSubBreeds?.let {
                 allSubBreeds = it.subBreeds
                 subBreedAdapter.swap(it.subBreeds)
+                fragmentWorker.dataReady(true)
             }
         })
     }
@@ -74,8 +82,10 @@ class SubBreedFragment: Fragment(), SubBreedAdapter.Interaction {
     }
 
     override fun onItemSelected(position: Int, item: String) {
-        val navDirection = SubBreedFragmentDirections
-            .actionNavigationSubBreedToNavigationImages(safeArgs.breedName, item.toLowerCase())
+        val navDirection = SubBreedFragmentDirections.actionNavigationSubBreedToNavigationImages(
+            safeArgs.breedName,
+            item.toLowerCase()
+        )
 
         findNavController().navigate(navDirection)
     }

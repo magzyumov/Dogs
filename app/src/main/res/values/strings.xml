@@ -5,4 +5,7 @@
 
     <string name="title_images">Images</string>
     <string name="title_subBreed">Sub breed</string>
+
+    <string name="title_understand_button">Understand</string>
+    <string name="title_network_trouble">Network trouble</string>
 </resources>

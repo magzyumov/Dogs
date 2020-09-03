@@ -14,7 +14,7 @@ class ResourceManager  {
         App.getComponent().inject(this)
     }
 
-    fun getStartString(): String{ return context.getString(R.string.app_name) }
+    fun getAppNameString(): String{ return context.getString(R.string.app_name) }
     fun getPauseString(): String{ return context.getString(R.string.app_name) }
     fun getFinishString(): String{ return context.getString(R.string.app_name) }
 }

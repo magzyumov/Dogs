@@ -2,6 +2,7 @@ package ru.magzyumov.dogs.ui.main
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.magzyumov.dogs.model.entity.DogEntity
 import ru.magzyumov.dogs.model.response.BreedsResponse.*
@@ -39,9 +40,14 @@ class MainViewModel @Inject constructor(
         return dogsRepository.getById(id)
     }
 
+    fun getNetworkStatus(): LiveData<String>{
+        return dogsRepository.getNetworkStatus()
+    }
+
     fun getAllBreeds(): LiveData<List<Breed>>{
         return dogsRepository.getAllBreeds()
     }
+
 
     fun getSubBreeds(subBreed: String): LiveData<SubBreeds>{
         return dogsRepository.getSubBreeds(subBreed)
