@@ -14,7 +14,8 @@
             app:destination="@id/navigation_images" />
         <action
             android:id="@+id/action_navigation_list_to_navigation_subBreed"
-            app:destination="@id/navigation_subBreed" />
+            app:destination="@id/navigation_subBreed"
+            app:popUpToInclusive="false" />
     </fragment>
 
     <fragment

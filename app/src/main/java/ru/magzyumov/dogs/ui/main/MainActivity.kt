@@ -1,17 +1,15 @@
 package ru.magzyumov.dogs.ui.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import android.widget.FrameLayout
-import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
+import androidx.appcompat.widget.Toolbar
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import ru.magzyumov.dogs.App
 import ru.magzyumov.dogs.R
@@ -37,13 +35,14 @@ class MainActivity: AppCompatActivity(), IFragmentWorker {
 
         val navController = findNavController(R.id.nav_host_fragment)
 
-        val appBarConfiguration = AppBarConfiguration(setOf(
-            R.id.navigation_list, R.id.navigation_favourites
-        ))
+        val appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.navigation_list, R.id.navigation_favourites
+            )
+        )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        observerLiveData()
         alertDialog = AlertDialogWindow(this, getString(R.string.title_understand_button))
     }
 
@@ -64,15 +63,7 @@ class MainActivity: AppCompatActivity(), IFragmentWorker {
         }
     }
 
-    private fun observerLiveData() {
-        mainViewModel.getNetworkStatus().observe(this, Observer{networkStatus ->
-            networkStatus?.let {
-                showMessage(getString(R.string.title_network_trouble), it)
-            }
-        })
-    }
-
-    private fun showMessage(title: String, message: String){
+    override fun showMessage(title: String, message: String){
         alertDialog.show(title, message)
     }
 }

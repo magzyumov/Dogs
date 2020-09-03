@@ -8,9 +8,11 @@ import ru.magzyumov.dogs.ui.adapter.BreedAdapter
 import android.os.Bundle
 
 import android.view.*
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 
 import androidx.lifecycle.Observer
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import ru.magzyumov.dogs.App
@@ -66,6 +68,11 @@ class ListFragment: Fragment(), BreedAdapter.Interaction {
                 allBreeds = listOfBreeds
                 breedAdapter.swap(it)
                 fragmentWorker.dataReady(true)
+            }
+        })
+        mainViewModel.getNetworkStatus().observe(viewLifecycleOwner, Observer{networkStatus ->
+            networkStatus?.let {
+                fragmentWorker.showMessage(getString(R.string.title_network_trouble), it)
             }
         })
     }

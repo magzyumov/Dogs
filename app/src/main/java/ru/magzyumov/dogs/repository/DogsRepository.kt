@@ -16,7 +16,10 @@ import ru.magzyumov.dogs.model.response.BreedsResponse.*
 import ru.magzyumov.dogs.util.IDogsRequest
 import javax.inject.Inject
 
-class DogsRepository @Inject constructor(val dogsDao: IDogsDao, val dogsRequest: IDogsRequest){
+class DogsRepository @Inject constructor(
+    private val dogsDao: IDogsDao,
+    private val dogsRequest: IDogsRequest
+){
     private val netWorkStatusLiveData: MutableLiveData<String> = MutableLiveData()
     private val listOfBreedsLiveData: MutableLiveData<List<Breed>> = MutableLiveData()
     private val listOfSubBreedsLiveData: MutableLiveData<SubBreeds> = MutableLiveData()
@@ -26,7 +29,6 @@ class DogsRepository @Inject constructor(val dogsDao: IDogsDao, val dogsRequest:
     fun getListOfBreeds(): LiveData<List<Breed>> = listOfBreedsLiveData
     fun getListOfSubBreeds(): LiveData<SubBreeds> = listOfSubBreedsLiveData
     fun getListOfImages(): LiveData<BreedImages> = listOfImagesLiveData
-
 
     fun getAllBreeds() {
         dogsRequest.getAllBreedsFromServer()

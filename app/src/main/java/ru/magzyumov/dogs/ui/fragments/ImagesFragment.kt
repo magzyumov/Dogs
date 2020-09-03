@@ -2,17 +2,16 @@ package ru.magzyumov.dogs.ui.fragments
 
 
 import android.content.Context
-import kotlinx.android.synthetic.main.fragment_images.*
-
 import android.os.Bundle
-
 import android.util.Log
-
 import android.view.*
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
-
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
+import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.fragment_images.*
 import ru.magzyumov.dogs.App
 import ru.magzyumov.dogs.R
 import ru.magzyumov.dogs.ui.adapter.ImageAdapter
@@ -42,10 +41,11 @@ class ImagesFragment: Fragment(), ImageAdapter.Interaction {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
+        setHasOptionsMenu(true)
         allImages = arrayListOf()
         return inflater.inflate(R.layout.fragment_images, container, false)
     }
@@ -69,36 +69,51 @@ class ImagesFragment: Fragment(), ImageAdapter.Interaction {
     private fun observerLiveData() {
         when(safeArgs.subBreedName){
             NULL_SUB_BREED -> {
-                mainViewModel.getImagesForBreed(safeArgs.breedName).observe(viewLifecycleOwner, Observer { listOfImages ->
-                    listOfImages?.let {
-                        allImages = it.images
-                        imageAdapter.swap(it.images)
-                        fragmentWorker.dataReady(true)
-                    }
-                })
+                mainViewModel.getImagesForBreed(safeArgs.breedName).observe(
+                    viewLifecycleOwner,
+                    Observer { listOfImages ->
+                        listOfImages?.let {
+                            allImages = it.images
+                            imageAdapter.swap(it.images)
+                            fragmentWorker.dataReady(true)
+                        }
+                    })
                 fragmentWorker.changePageTitle(safeArgs.breedName)
             }
             else -> {
-                mainViewModel.getImagesForBreed(safeArgs.breedName, safeArgs.subBreedName).observe(viewLifecycleOwner, Observer { listOfImages ->
-                    listOfImages?.let {
-                        allImages = it.images
-                        imageAdapter.swap(it.images)
-                        fragmentWorker.dataReady(true)
-                    }
-                })
+                mainViewModel.getImagesForBreed(safeArgs.breedName, safeArgs.subBreedName).observe(
+                    viewLifecycleOwner,
+                    Observer { listOfImages ->
+                        listOfImages?.let {
+                            allImages = it.images
+                            imageAdapter.swap(it.images)
+                            fragmentWorker.dataReady(true)
+                        }
+                    })
                 fragmentWorker.changePageTitle(safeArgs.subBreedName)
             }
         }
-
+        mainViewModel.getNetworkStatus().observe(viewLifecycleOwner, Observer { networkStatus ->
+            networkStatus?.let {
+                fragmentWorker.showMessage(getString(R.string.title_network_trouble), it)
+            }
+        })
     }
 
     private fun initRecyclerView() {
         recyclerViewImages.apply {
             imageAdapter = ImageAdapter(allImages, this@ImagesFragment)
-            layoutManager = LinearLayoutManager(this@ImagesFragment.context, LinearLayoutManager.HORIZONTAL, false)
+            layoutManager = LinearLayoutManager(
+                this@ImagesFragment.context,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
             adapter = imageAdapter
         }
+        val snapHelper = PagerSnapHelper()
+        snapHelper.attachToRecyclerView(recyclerViewImages)
     }
+
 
     override fun onItemSelected(position: Int, item: String) {
         Log.e("Position", "$position")

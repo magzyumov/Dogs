@@ -8,4 +8,6 @@
 
     <string name="title_understand_button">Understand</string>
     <string name="title_network_trouble">Network trouble</string>
+
+    <string name="menu_share">Share</string>
 </resources>

@@ -3,7 +3,9 @@ package ru.magzyumov.dogs.ui.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.*
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 
 import androidx.lifecycle.Observer
@@ -46,6 +48,7 @@ class SubBreedFragment: Fragment(), SubBreedAdapter.Interaction {
         return inflater.inflate(R.layout.fragment_sub_breeds, container, false)
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -69,6 +72,11 @@ class SubBreedFragment: Fragment(), SubBreedAdapter.Interaction {
                 allSubBreeds = it.subBreeds
                 subBreedAdapter.swap(it.subBreeds)
                 fragmentWorker.dataReady(true)
+            }
+        })
+        mainViewModel.getNetworkStatus().observe(viewLifecycleOwner, Observer{networkStatus ->
+            networkStatus?.let {
+                fragmentWorker.showMessage(getString(R.string.title_network_trouble), it)
             }
         })
     }

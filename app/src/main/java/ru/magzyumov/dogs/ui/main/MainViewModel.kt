@@ -10,8 +10,8 @@ import ru.magzyumov.dogs.repository.DogsRepository
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(
-    val dogsRepository: DogsRepository
-) : ViewModel() {
+    private val dogsRepository: DogsRepository
+): ViewModel() {
 
     fun getNetworkStatus(): LiveData<String>{
         return dogsRepository.getNetworkStatus()
@@ -21,7 +21,6 @@ class MainViewModel @Inject constructor(
         dogsRepository.getAllBreeds()
         return dogsRepository.getListOfBreeds()
     }
-
 
     fun getSubBreeds(subBreed: String): LiveData<SubBreeds>{
         dogsRepository.getSubBreeds(subBreed)
