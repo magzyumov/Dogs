@@ -60,8 +60,7 @@ class DogsRepository @Inject constructor(val dogsDao: IDogsDao, val dogsRequest:
         return dogsDao.getById(id)
     }
 
-    fun getAllBreeds(): LiveData<List<Breed>> {
-        val result: MutableLiveData<List<Breed>> = MutableLiveData()
+    fun getAllBreeds() {
         dogsRequest.getAllBreedsFromServer()
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.computation())
@@ -69,7 +68,7 @@ class DogsRepository @Inject constructor(val dogsDao: IDogsDao, val dogsRequest:
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object: DisposableSingleObserver<List<Breed>>() {
                 override fun onSuccess(breeds: List<Breed>) {
-                    result.value = breeds
+                    listOfBreedsLiveData.postValue(breeds)
                 }
 
                 override fun onError(e: Throwable) {
@@ -77,7 +76,6 @@ class DogsRepository @Inject constructor(val dogsDao: IDogsDao, val dogsRequest:
                     Log.e("GetAllBreeds", e.localizedMessage.orEmpty())
                 }
             })
-        return result
     }
 
     private val parseAllBreeds: Function1<BreedsResponse, List<Breed>> =
@@ -103,8 +101,7 @@ class DogsRepository @Inject constructor(val dogsDao: IDogsDao, val dogsRequest:
         }
 
 
-    fun getSubBreeds(subBreed: String): LiveData<SubBreeds> {
-        val result: MutableLiveData<SubBreeds> = MutableLiveData()
+    fun getSubBreeds(subBreed: String) {
         dogsRequest.getSubBreedsFromServer(subBreed)
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.computation())
@@ -112,14 +109,13 @@ class DogsRepository @Inject constructor(val dogsDao: IDogsDao, val dogsRequest:
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object: DisposableSingleObserver<SubBreeds>() {
                 override fun onSuccess(subBreeds: SubBreeds) {
-                    result.value = subBreeds
+                    listOfSubBreedsLiveData.postValue(subBreeds)
                 }
                 override fun onError(e: Throwable) {
                     netWorkStatusLiveData.postValue(e.localizedMessage.orEmpty())
                     Log.e("GetSubBreeds", e.localizedMessage.orEmpty())
                 }
             })
-        return result
     }
 
     private val parseSubBreeds: Function1<BreedsResponse, SubBreeds> =
@@ -136,8 +132,7 @@ class DogsRepository @Inject constructor(val dogsDao: IDogsDao, val dogsRequest:
         }
 
 
-    fun getImagesForBreed(breed: String): LiveData<BreedImages> {
-        val result: MutableLiveData<BreedImages> = MutableLiveData()
+    fun getImagesForBreed(breed: String) {
         dogsRequest.getImagesForBreed(breed)
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.computation())
@@ -145,18 +140,16 @@ class DogsRepository @Inject constructor(val dogsDao: IDogsDao, val dogsRequest:
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object: DisposableSingleObserver<BreedImages>() {
                 override fun onSuccess(breedImages: BreedImages) {
-                    result.value = breedImages
+                    listOfImagesLiveData.postValue(breedImages)
                 }
                 override fun onError(e: Throwable) {
                     netWorkStatusLiveData.postValue(e.localizedMessage.orEmpty())
                     Log.e("GetImagesForBreed", e.localizedMessage.orEmpty())
                 }
             })
-        return result
     }
 
-    fun getImagesForBreed(breed: String, subBreed: String): LiveData<BreedImages> {
-        val result: MutableLiveData<BreedImages> = MutableLiveData()
+    fun getImagesForBreed(breed: String, subBreed: String){
         dogsRequest.getImagesForBreed(breed, subBreed)
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.computation())
@@ -164,14 +157,13 @@ class DogsRepository @Inject constructor(val dogsDao: IDogsDao, val dogsRequest:
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object: DisposableSingleObserver<BreedImages>() {
                 override fun onSuccess(breedImages: BreedImages) {
-                    result.value = breedImages
+                    listOfImagesLiveData.postValue(breedImages)
                 }
                 override fun onError(e: Throwable) {
                     netWorkStatusLiveData.postValue(e.localizedMessage.orEmpty())
                     Log.e("GetImagesForBreed", e.localizedMessage.orEmpty())
                 }
             })
-        return result
     }
 
     private val parseImagesForBreed: Function1<BreedsResponse, BreedImages> =
