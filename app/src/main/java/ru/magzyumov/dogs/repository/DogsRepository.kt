@@ -27,38 +27,6 @@ class DogsRepository @Inject constructor(val dogsDao: IDogsDao, val dogsRequest:
     fun getListOfSubBreeds(): LiveData<SubBreeds> = listOfSubBreedsLiveData
     fun getListOfImages(): LiveData<BreedImages> = listOfImagesLiveData
 
-    fun insert(garage: DogEntity) {
-        CoroutineScope(Dispatchers.IO).launch {
-            dogsDao.insert(garage)
-        }
-    }
-
-    fun delete(garage: DogEntity) {
-        CoroutineScope(Dispatchers.IO).launch {
-            dogsDao.delete(garage)
-        }
-    }
-
-    fun update(garage: DogEntity) {
-        CoroutineScope(Dispatchers.IO).launch {
-            dogsDao.update(garage)
-            Log.e("DEBUG", "update is called in repo")
-        }
-    }
-
-    fun deleteById(id: Int) {
-        CoroutineScope(Dispatchers.IO).launch {
-            dogsDao.deleteById(id)
-        }
-    }
-
-    fun getAll(): LiveData<List<DogEntity>> {
-        return dogsDao.getAll()
-    }
-
-    fun getById(id: Int): LiveData<DogEntity> {
-        return dogsDao.getById(id)
-    }
 
     fun getAllBreeds() {
         dogsRequest.getAllBreedsFromServer()

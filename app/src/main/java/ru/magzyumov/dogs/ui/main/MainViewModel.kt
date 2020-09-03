@@ -13,33 +13,6 @@ class MainViewModel @Inject constructor(
     val dogsRepository: DogsRepository
 ) : ViewModel() {
 
-    fun insert(dog: DogEntity) {
-        dogsRepository.insert(dog)
-    }
-
-    fun delete(dog: DogEntity) {
-        dogsRepository.delete(dog)
-    }
-
-    fun update(dog: DogEntity) {
-        Log.e("DEBUG", "update is called in viewmodel")
-        dogsRepository.update(dog)
-    }
-
-    fun deleteById(id: Int) {
-        dogsRepository.deleteById(id)
-    }
-
-    fun getAll(): LiveData<List<DogEntity>> {
-        Log.e("DEBUG", "View model getAllGarages")
-        return dogsRepository.getAll()
-    }
-
-    fun getById(id: Int): LiveData<DogEntity> {
-        Log.e("DEBUG", "View model getOneGarage")
-        return dogsRepository.getById(id)
-    }
-
     fun getNetworkStatus(): LiveData<String>{
         return dogsRepository.getNetworkStatus()
     }
