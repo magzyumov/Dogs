@@ -34,6 +34,7 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/buttonLike"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="0.5"
@@ -42,6 +43,7 @@
                     android:src="@drawable/ic_favorite_24dp"/>
 
                 <ImageView
+                    android:id="@+id/buttonShare"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="0.5"

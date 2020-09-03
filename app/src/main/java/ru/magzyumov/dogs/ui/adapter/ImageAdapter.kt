@@ -9,14 +9,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import kotlinx.android.synthetic.main.item_image.view.*
 import ru.magzyumov.dogs.R
-import ru.magzyumov.dogs.databinding.ItemDogBinding
 import ru.magzyumov.dogs.databinding.ItemImageBinding
-import ru.magzyumov.dogs.model.response.BreedsResponse.*
-import ru.magzyumov.dogs.ui.adapter.BreedAdapter.*
+
 
 class ImageAdapter(images: List<String>,
-                   private val interaction: Interaction? = null): RecyclerView.Adapter<ImageAdapter.ImageHolder>() {
+                   private val interaction: Interaction): RecyclerView.Adapter<ImageAdapter.ImageHolder>() {
 
     private var mImages: MutableList<String> = mutableListOf()
 
@@ -46,14 +45,17 @@ class ImageAdapter(images: List<String>,
     }
 
     class ImageHolder(binding: ItemImageBinding,
-                      private val interaction: Interaction?): RecyclerView.ViewHolder(binding.root) {
+                      private val interaction: Interaction): RecyclerView.ViewHolder(binding.root) {
         private val mBinding: ItemImageBinding = binding
 
         fun bind(image: String) {
             mBinding.image = image
             mBinding.executePendingBindings()
-            mBinding.root.setOnClickListener{
-                interaction?.onItemSelected(adapterPosition, image)
+            mBinding.root.buttonShare.setOnClickListener{
+                interaction.onShareSelected(image)
+            }
+            mBinding.root.buttonLike.setOnClickListener{
+                interaction.onLikeSelected(adapterPosition, image)
             }
         }
     }
@@ -61,7 +63,7 @@ class ImageAdapter(images: List<String>,
     class DiffCallback(
         private val oldList: List<String>,
         private val newList: List<String>
-    ) : DiffUtil.Callback() {
+    ): DiffUtil.Callback() {
 
         override fun getOldListSize() = oldList.size
 
@@ -77,7 +79,8 @@ class ImageAdapter(images: List<String>,
     }
 
     interface Interaction {
-        fun onItemSelected(position: Int, item: String)
+        fun onShareSelected(item: String)
+        fun onLikeSelected(position: Int, item: String)
     }
 
     companion object {

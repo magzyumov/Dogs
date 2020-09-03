@@ -8,11 +8,9 @@ import ru.magzyumov.dogs.ui.adapter.BreedAdapter
 import android.os.Bundle
 
 import android.view.*
-import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 
 import androidx.lifecycle.Observer
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import ru.magzyumov.dogs.App

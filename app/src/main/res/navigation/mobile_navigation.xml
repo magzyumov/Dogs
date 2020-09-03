@@ -21,7 +21,11 @@
     <fragment
         android:id="@+id/navigation_favourites"
         android:name="ru.magzyumov.dogs.ui.fragments.FavouritesFragment"
-        android:label="@string/title_favourites" />
+        android:label="@string/title_favourites" >
+        <action
+            android:id="@+id/action_navigation_favourites_to_navigation_images"
+            app:destination="@id/navigation_images" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_images"
@@ -33,6 +37,10 @@
         <argument
             android:name="subBreedName"
             app:argType="string" />
+        <argument
+            android:name="local"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
 
     <fragment

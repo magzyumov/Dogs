@@ -6,16 +6,11 @@ import ru.magzyumov.dogs.ui.fragments.ImagesFragment
 import ru.magzyumov.dogs.ui.fragments.ListFragment
 import ru.magzyumov.dogs.ui.fragments.SubBreedFragment
 import ru.magzyumov.dogs.ui.main.*
-import ru.magzyumov.dogs.util.ResourceManager
 import javax.inject.Singleton
 
 @Singleton
 @Component(modules = [AppModule::class])
 interface AppComponent {
-
-    fun inject(context: ResourceManager)
-
-    fun inject(viewModel: MainViewModel)
 
     fun inject(mainActivity: MainActivity)
 

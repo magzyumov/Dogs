@@ -4,13 +4,15 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.magzyumov.dogs.model.database.IDogsDao
-import ru.magzyumov.dogs.model.entity.DogEntity
+import ru.magzyumov.dogs.model.entity.FavouritesCountEntity
+import ru.magzyumov.dogs.model.entity.FavouritesEntity
 import ru.magzyumov.dogs.model.response.BreedsResponse
 import ru.magzyumov.dogs.model.response.BreedsResponse.*
 import ru.magzyumov.dogs.util.IDogsRequest
@@ -24,11 +26,33 @@ class DogsRepository @Inject constructor(
     private val listOfBreedsLiveData: MutableLiveData<List<Breed>> = MutableLiveData()
     private val listOfSubBreedsLiveData: MutableLiveData<SubBreeds> = MutableLiveData()
     private val listOfImagesLiveData: MutableLiveData<BreedImages> = MutableLiveData()
+    private val dbWorkerLiveData: MutableLiveData<String> = MutableLiveData()
+    private lateinit var subscriptions: CompositeDisposable
 
     fun getNetworkStatus(): LiveData<String> = netWorkStatusLiveData
     fun getListOfBreeds(): LiveData<List<Breed>> = listOfBreedsLiveData
     fun getListOfSubBreeds(): LiveData<SubBreeds> = listOfSubBreedsLiveData
     fun getListOfImages(): LiveData<BreedImages> = listOfImagesLiveData
+
+    fun insertFavourite(favourite: FavouritesEntity) {
+        CoroutineScope(Dispatchers.IO).launch {
+            dogsDao.insertFavourite(favourite)
+        }
+    }
+
+    fun deleteFavouriteByPhoto(photo: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            dogsDao.deleteFavouriteByPhoto(photo)
+        }
+    }
+
+    fun getAllFavourite(): LiveData<List<FavouritesCountEntity>> {
+        return dogsDao.getAllFavourite()
+    }
+
+    fun getFavouriteImages(breed: String): LiveData<List<String>> {
+        return dogsDao.getFavouriteImages(breed)
+    }
 
     fun getAllBreeds() {
         dogsRequest.getAllBreedsFromServer()
@@ -43,7 +67,6 @@ class DogsRepository @Inject constructor(
 
                 override fun onError(e: Throwable) {
                     netWorkStatusLiveData.postValue(e.localizedMessage.orEmpty())
-                    Log.e("GetAllBreeds", e.localizedMessage.orEmpty())
                 }
             })
     }
@@ -83,7 +106,6 @@ class DogsRepository @Inject constructor(
                 }
                 override fun onError(e: Throwable) {
                     netWorkStatusLiveData.postValue(e.localizedMessage.orEmpty())
-                    Log.e("GetSubBreeds", e.localizedMessage.orEmpty())
                 }
             })
     }
@@ -114,7 +136,6 @@ class DogsRepository @Inject constructor(
                 }
                 override fun onError(e: Throwable) {
                     netWorkStatusLiveData.postValue(e.localizedMessage.orEmpty())
-                    Log.e("GetImagesForBreed", e.localizedMessage.orEmpty())
                 }
             })
     }
@@ -131,7 +152,6 @@ class DogsRepository @Inject constructor(
                 }
                 override fun onError(e: Throwable) {
                     netWorkStatusLiveData.postValue(e.localizedMessage.orEmpty())
-                    Log.e("GetImagesForBreed", e.localizedMessage.orEmpty())
                 }
             })
     }

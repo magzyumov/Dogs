@@ -2,26 +2,23 @@ package ru.magzyumov.dogs.model.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import ru.magzyumov.dogs.model.entity.DogEntity
+import io.reactivex.Single
+import ru.magzyumov.dogs.model.entity.FavouritesCountEntity
+import ru.magzyumov.dogs.model.entity.FavouritesEntity
 
 
 @Dao
 interface IDogsDao {
-    @Query("SELECT * FROM dogs")
-    fun getAll(): LiveData<List<DogEntity>>
-
-    @Query("SELECT * FROM dogs WHERE id = :id")
-    fun getById(id: Int): LiveData<DogEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(garage: DogEntity): Long
+    fun insertFavourite(favourite: FavouritesEntity): Long
 
-    @Delete
-    fun delete(garage: DogEntity): Int
+    @Query("SELECT breed, COUNT(picture) as count FROM favourites GROUP BY breed")
+    fun getAllFavourite(): LiveData<List<FavouritesCountEntity>>
 
-    @Update
-    fun update(garage: DogEntity)
+    @Query("SELECT picture FROM favourites WHERE breed = :breed")
+    fun getFavouriteImages(breed: String): LiveData<List<String>>
 
-    @Query("DELETE FROM dogs WHERE id = :id")
-    fun deleteById(id: Int)
+    @Query("DELETE FROM favourites WHERE picture = :photo")
+    fun deleteFavouriteByPhoto(photo: String): Int
 }

@@ -11,7 +11,7 @@ import ru.magzyumov.dogs.model.response.BreedsResponse.*
 import ru.magzyumov.dogs.ui.adapter.BreedAdapter.*
 
 class BreedAdapter(dogs: List<Breed>,
-                   private val interaction: Interaction? = null): RecyclerView.Adapter<DogHolder>() {
+                   private val interaction: Interaction): RecyclerView.Adapter<DogHolder>() {
 
     private var mDogs: MutableList<Breed> = mutableListOf()
 
@@ -43,14 +43,14 @@ class BreedAdapter(dogs: List<Breed>,
     }
 
     class DogHolder(binding: ItemDogBinding,
-                       private val interaction: Interaction?): RecyclerView.ViewHolder(binding.root) {
+                       private val interaction: Interaction): RecyclerView.ViewHolder(binding.root) {
         private val mBinding: ItemDogBinding = binding
 
         fun bind(dog: Breed) {
             mBinding.dog = dog
             mBinding.executePendingBindings()
             mBinding.root.setOnClickListener{
-                interaction?.onItemSelected(adapterPosition, dog)
+                interaction.onItemSelected(adapterPosition, dog)
             }
         }
     }

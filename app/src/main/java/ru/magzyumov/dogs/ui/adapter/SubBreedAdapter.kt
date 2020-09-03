@@ -9,7 +9,7 @@ import ru.magzyumov.dogs.R
 import ru.magzyumov.dogs.databinding.ItemSubBreedBinding
 
 class SubBreedAdapter(subBreeds: List<String>,
-                      private val interaction: Interaction? = null): RecyclerView.Adapter<SubBreedAdapter.SubBreedHolder>() {
+                      private val interaction: Interaction): RecyclerView.Adapter<SubBreedAdapter.SubBreedHolder>() {
 
     private var mSubBreeds: MutableList<String> = mutableListOf()
 
@@ -39,14 +39,14 @@ class SubBreedAdapter(subBreeds: List<String>,
     }
 
     class SubBreedHolder(binding: ItemSubBreedBinding,
-                         private val interaction: Interaction?): RecyclerView.ViewHolder(binding.root) {
+                         private val interaction: Interaction): RecyclerView.ViewHolder(binding.root) {
         private val mBinding: ItemSubBreedBinding = binding
 
         fun bind(subBreed: String) {
             mBinding.subBreed = subBreed
             mBinding.executePendingBindings()
             mBinding.root.setOnClickListener{
-                interaction?.onItemSelected(adapterPosition, subBreed)
+                interaction.onItemSelected(adapterPosition, subBreed)
             }
         }
     }

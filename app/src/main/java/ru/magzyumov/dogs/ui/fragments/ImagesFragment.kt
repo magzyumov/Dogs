@@ -2,6 +2,7 @@ package ru.magzyumov.dogs.ui.fragments
 
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_images.*
 import ru.magzyumov.dogs.App
 import ru.magzyumov.dogs.R
+import ru.magzyumov.dogs.model.entity.FavouritesEntity
 import ru.magzyumov.dogs.ui.adapter.ImageAdapter
 import ru.magzyumov.dogs.ui.main.IFragmentWorker
 import ru.magzyumov.dogs.ui.main.MainViewModel
@@ -30,6 +32,7 @@ class ImagesFragment: Fragment(), ImageAdapter.Interaction {
     private lateinit var allImages: List<String>
     private lateinit var safeArgs: ImagesFragmentArgs
     private lateinit var fragmentWorker: IFragmentWorker
+    private lateinit var breedName: String
 
     init {
         App.getComponent().inject(this)
@@ -69,16 +72,34 @@ class ImagesFragment: Fragment(), ImageAdapter.Interaction {
     private fun observerLiveData() {
         when(safeArgs.subBreedName){
             NULL_SUB_BREED -> {
-                mainViewModel.getImagesForBreed(safeArgs.breedName).observe(
-                    viewLifecycleOwner,
-                    Observer { listOfImages ->
-                        listOfImages?.let {
-                            allImages = it.images
-                            imageAdapter.swap(it.images)
-                            fragmentWorker.dataReady(true)
-                        }
-                    })
-                fragmentWorker.changePageTitle(safeArgs.breedName)
+                when(safeArgs.local){
+                    false -> {
+                        mainViewModel.getImagesForBreed(safeArgs.breedName).observe(
+                            viewLifecycleOwner,
+                            Observer { listOfImages ->
+                                listOfImages?.let {
+                                    allImages = it.images
+                                    imageAdapter.swap(it.images)
+                                    fragmentWorker.dataReady(true)
+                                }
+                            })
+                        breedName = safeArgs.breedName
+                        fragmentWorker.changePageTitle(breedName)
+                    }
+                    true -> {
+                        mainViewModel.getFavouriteImages(safeArgs.breedName).observe(
+                            viewLifecycleOwner,
+                            Observer { listOfImages ->
+                                listOfImages?.let {
+                                    allImages = it
+                                    imageAdapter.swap(it)
+                                    fragmentWorker.dataReady(true)
+                                }
+                            })
+                        breedName = safeArgs.breedName
+                        fragmentWorker.changePageTitle(breedName)
+                    }
+                }
             }
             else -> {
                 mainViewModel.getImagesForBreed(safeArgs.breedName, safeArgs.subBreedName).observe(
@@ -90,7 +111,8 @@ class ImagesFragment: Fragment(), ImageAdapter.Interaction {
                             fragmentWorker.dataReady(true)
                         }
                     })
-                fragmentWorker.changePageTitle(safeArgs.subBreedName)
+                breedName = safeArgs.subBreedName
+                fragmentWorker.changePageTitle(breedName)
             }
         }
         mainViewModel.getNetworkStatus().observe(viewLifecycleOwner, Observer { networkStatus ->
@@ -114,9 +136,25 @@ class ImagesFragment: Fragment(), ImageAdapter.Interaction {
         snapHelper.attachToRecyclerView(recyclerViewImages)
     }
 
+    override fun onLikeSelected(position: Int, item: String) {
+        when(safeArgs.local){
+            false -> {
+                mainViewModel.insertFavourite(FavouritesEntity(breed = breedName, picture = item))
+            }
+            true -> {
+                mainViewModel.deleteFavouriteByPhoto(item)
+            }
+        }
+    }
 
-    override fun onItemSelected(position: Int, item: String) {
-        Log.e("Position", "$position")
-        Log.e("Item", item)
+    override fun onShareSelected(item: String) {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, item)
+            type = "text/plain"
+        }
+
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        startActivity(shareIntent)
     }
 }
