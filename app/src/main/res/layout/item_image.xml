@@ -38,7 +38,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="0.5"
-                    android:layout_margin="15dp"
+                    android:layout_margin="5dp"
                     android:layout_gravity="end"
                     android:src="@drawable/ic_favorite_24dp"/>
 
@@ -47,7 +47,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="0.5"
-                    android:layout_margin="15dp"
+                    android:layout_margin="5dp"
                     android:layout_gravity="start"
                     android:src="@drawable/ic_share"/>
             </LinearLayout>

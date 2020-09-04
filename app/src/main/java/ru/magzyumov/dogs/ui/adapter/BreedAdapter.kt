@@ -11,7 +11,7 @@ import ru.magzyumov.dogs.data.response.BreedsResponse.*
 import ru.magzyumov.dogs.ui.adapter.BreedAdapter.*
 
 class BreedAdapter(dogs: List<Breed>,
-                   private val interaction: Interaction): RecyclerView.Adapter<DogHolder>() {
+                   private val mInteraction: Interaction): RecyclerView.Adapter<DogHolder>() {
 
     private var mDogs: MutableList<Breed> = mutableListOf()
 
@@ -22,7 +22,7 @@ class BreedAdapter(dogs: List<Breed>,
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DogHolder {
         val inflater: LayoutInflater = LayoutInflater.from(parent.context)
         val binding: ItemDogBinding = DataBindingUtil.inflate(inflater, R.layout.item_dog, parent, false)
-        return DogHolder(binding, interaction)
+        return DogHolder(binding, mInteraction)
     }
 
     override fun getItemCount(): Int {

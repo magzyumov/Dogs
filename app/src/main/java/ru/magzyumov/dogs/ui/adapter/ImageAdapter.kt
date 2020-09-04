@@ -15,7 +15,7 @@ import ru.magzyumov.dogs.databinding.ItemImageBinding
 
 
 class ImageAdapter(images: List<String>,
-                   private val interaction: Interaction): RecyclerView.Adapter<ImageAdapter.ImageHolder>() {
+                   private val mInteraction: Interaction): RecyclerView.Adapter<ImageAdapter.ImageHolder>() {
 
     private var mImages: MutableList<String> = mutableListOf()
 
@@ -26,7 +26,7 @@ class ImageAdapter(images: List<String>,
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageHolder {
         val inflater: LayoutInflater = LayoutInflater.from(parent.context)
         val binding: ItemImageBinding = DataBindingUtil.inflate(inflater, R.layout.item_image, parent, false)
-        return ImageHolder(binding, interaction)
+        return ImageHolder(binding, mInteraction)
     }
 
     override fun getItemCount(): Int = mImages.size

@@ -3,27 +3,17 @@ package ru.magzyumov.dogs.ui.main
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
-import ru.magzyumov.dogs.App
 import ru.magzyumov.dogs.R
 import ru.magzyumov.dogs.ui.dialog.AlertDialogWindow
-import javax.inject.Inject
 
 class MainActivity: AppCompatActivity(), IFragmentWorker {
-    private lateinit var alertDialog: AlertDialogWindow
-
-    @Inject
-    lateinit var mainViewModel: MainViewModel
-
-    init {
-        App.getComponent().inject(this)
-    }
+    private lateinit var mAlertDialog: AlertDialogWindow
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +32,7 @@ class MainActivity: AppCompatActivity(), IFragmentWorker {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        alertDialog = AlertDialogWindow(this, getString(R.string.title_understand_button))
+        mAlertDialog = AlertDialogWindow(this, getString(R.string.title_understand_button))
     }
 
     override fun changePageTitle(title: String) {
@@ -63,6 +53,6 @@ class MainActivity: AppCompatActivity(), IFragmentWorker {
     }
 
     override fun showMessage(title: String, message: String){
-        alertDialog.show(title, message)
+        mAlertDialog.show(title, message)
     }
 }

@@ -3,7 +3,6 @@ package ru.magzyumov.dogs.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
@@ -18,54 +17,52 @@ import ru.magzyumov.dogs.util.IDogsRequest
 import javax.inject.Inject
 
 class DogsRepository @Inject constructor(
-    private val dogsDao: IDogsDao,
-    private val dogsRequest: IDogsRequest
+    private val mDogsDao: IDogsDao,
+    private val mDogsRequest: IDogsRequest
 ){
-    private val netWorkStatusLiveData: MutableLiveData<String> = MutableLiveData()
-    private val listOfBreedsLiveData: MutableLiveData<List<Breed>> = MutableLiveData()
-    private val listOfSubBreedsLiveData: MutableLiveData<SubBreeds> = MutableLiveData()
-    private val listOfImagesLiveData: MutableLiveData<BreedImages> = MutableLiveData()
-    private val dbWorkerLiveData: MutableLiveData<String> = MutableLiveData()
-    private lateinit var subscriptions: CompositeDisposable
+    private val mNetWorkStatusLiveData: MutableLiveData<String> = MutableLiveData()
+    private val mListOfBreedsLiveData: MutableLiveData<List<Breed>> = MutableLiveData()
+    private val mListOfSubBreedsLiveData: MutableLiveData<SubBreeds> = MutableLiveData()
+    private val mListOfImagesLiveData: MutableLiveData<BreedImages> = MutableLiveData()
 
-    fun getNetworkStatus(): LiveData<String> = netWorkStatusLiveData
-    fun getListOfBreeds(): LiveData<List<Breed>> = listOfBreedsLiveData
-    fun getListOfSubBreeds(): LiveData<SubBreeds> = listOfSubBreedsLiveData
-    fun getListOfImages(): LiveData<BreedImages> = listOfImagesLiveData
+    fun getNetworkStatus(): LiveData<String> = mNetWorkStatusLiveData
+    fun getListOfBreeds(): LiveData<List<Breed>> = mListOfBreedsLiveData
+    fun getListOfSubBreeds(): LiveData<SubBreeds> = mListOfSubBreedsLiveData
+    fun getListOfImages(): LiveData<BreedImages> = mListOfImagesLiveData
 
     fun insertFavourite(favourite: FavouritesEntity) {
         CoroutineScope(Dispatchers.IO).launch {
-            dogsDao.insertFavourite(favourite)
+            mDogsDao.insertFavourite(favourite)
         }
     }
 
     fun deleteFavouriteByPhoto(photo: String) {
         CoroutineScope(Dispatchers.IO).launch {
-            dogsDao.deleteFavouriteByPhoto(photo)
+            mDogsDao.deleteFavouriteByPhoto(photo)
         }
     }
 
     fun getAllFavourite(): LiveData<List<FavouritesCount>> {
-        return dogsDao.getAllFavourite()
+        return mDogsDao.getAllFavourite()
     }
 
     fun getFavouriteImages(breed: String): LiveData<List<String>> {
-        return dogsDao.getFavouriteImages(breed)
+        return mDogsDao.getFavouriteImages(breed)
     }
 
     fun getAllBreeds() {
-        dogsRequest.getAllBreedsFromServer()
+        mDogsRequest.getAllBreedsFromServer()
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.computation())
             .map(parseAllBreeds)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object: DisposableSingleObserver<List<Breed>>() {
                 override fun onSuccess(breeds: List<Breed>) {
-                    listOfBreedsLiveData.postValue(breeds)
+                    mListOfBreedsLiveData.postValue(breeds)
                 }
 
                 override fun onError(e: Throwable) {
-                    netWorkStatusLiveData.postValue(e.localizedMessage.orEmpty())
+                    mNetWorkStatusLiveData.postValue(e.localizedMessage.orEmpty())
                 }
             })
     }
@@ -94,17 +91,17 @@ class DogsRepository @Inject constructor(
 
 
     fun getSubBreeds(subBreed: String) {
-        dogsRequest.getSubBreedsFromServer(subBreed)
+        mDogsRequest.getSubBreedsFromServer(subBreed)
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.computation())
             .map(parseSubBreeds)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object: DisposableSingleObserver<SubBreeds>() {
                 override fun onSuccess(subBreeds: SubBreeds) {
-                    listOfSubBreedsLiveData.postValue(subBreeds)
+                    mListOfSubBreedsLiveData.postValue(subBreeds)
                 }
                 override fun onError(e: Throwable) {
-                    netWorkStatusLiveData.postValue(e.localizedMessage.orEmpty())
+                    mNetWorkStatusLiveData.postValue(e.localizedMessage.orEmpty())
                 }
             })
     }
@@ -124,33 +121,33 @@ class DogsRepository @Inject constructor(
 
 
     fun getImagesForBreed(breed: String) {
-        dogsRequest.getImagesForBreed(breed)
+        mDogsRequest.getImagesForBreed(breed)
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.computation())
             .map(parseImagesForBreed)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object: DisposableSingleObserver<BreedImages>() {
                 override fun onSuccess(breedImages: BreedImages) {
-                    listOfImagesLiveData.postValue(breedImages)
+                    mListOfImagesLiveData.postValue(breedImages)
                 }
                 override fun onError(e: Throwable) {
-                    netWorkStatusLiveData.postValue(e.localizedMessage.orEmpty())
+                    mNetWorkStatusLiveData.postValue(e.localizedMessage.orEmpty())
                 }
             })
     }
 
     fun getImagesForBreed(breed: String, subBreed: String){
-        dogsRequest.getImagesForBreed(breed, subBreed)
+        mDogsRequest.getImagesForBreed(breed, subBreed)
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.computation())
             .map(parseImagesForBreed)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object: DisposableSingleObserver<BreedImages>() {
                 override fun onSuccess(breedImages: BreedImages) {
-                    listOfImagesLiveData.postValue(breedImages)
+                    mListOfImagesLiveData.postValue(breedImages)
                 }
                 override fun onError(e: Throwable) {
-                    netWorkStatusLiveData.postValue(e.localizedMessage.orEmpty())
+                    mNetWorkStatusLiveData.postValue(e.localizedMessage.orEmpty())
                 }
             })
     }

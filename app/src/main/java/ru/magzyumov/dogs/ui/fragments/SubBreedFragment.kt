@@ -3,9 +3,7 @@ package ru.magzyumov.dogs.ui.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 
 import androidx.lifecycle.Observer
@@ -23,12 +21,12 @@ import javax.inject.Inject
 class SubBreedFragment: Fragment(), SubBreedAdapter.Interaction {
 
     @Inject
-    lateinit var mainViewModel: MainViewModel
+    lateinit var mMainViewModel: MainViewModel
 
-    private lateinit var subBreedAdapter: SubBreedAdapter
-    private lateinit var allSubBreeds: List<String>
-    private lateinit var safeArgs: SubBreedFragmentArgs
-    private lateinit var fragmentWorker: IFragmentWorker
+    private lateinit var mSubBreedAdapter: SubBreedAdapter
+    private lateinit var mAllSubBreeds: List<String>
+    private lateinit var mSafeArgs: SubBreedFragmentArgs
+    private lateinit var mFragmentWorker: IFragmentWorker
 
     init {
         App.getComponent().inject(this)
@@ -36,7 +34,7 @@ class SubBreedFragment: Fragment(), SubBreedAdapter.Interaction {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is IFragmentWorker) fragmentWorker = context
+        if (context is IFragmentWorker) mFragmentWorker = context
     }
 
     override fun onCreateView(
@@ -44,7 +42,7 @@ class SubBreedFragment: Fragment(), SubBreedAdapter.Interaction {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        allSubBreeds = arrayListOf()
+        mAllSubBreeds = arrayListOf()
         return inflater.inflate(R.layout.fragment_sub_breeds, container, false)
     }
 
@@ -52,7 +50,7 @@ class SubBreedFragment: Fragment(), SubBreedAdapter.Interaction {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        fragmentWorker.dataReady(false)
+        mFragmentWorker.dataReady(false)
 
         prepareArguments()
         initRecyclerView()
@@ -61,37 +59,37 @@ class SubBreedFragment: Fragment(), SubBreedAdapter.Interaction {
 
     private fun prepareArguments() {
         arguments?.let {
-            safeArgs = SubBreedFragmentArgs.fromBundle(it)
+            mSafeArgs = SubBreedFragmentArgs.fromBundle(it)
         }
-        fragmentWorker.changePageTitle(safeArgs.breedName)
+        mFragmentWorker.changePageTitle(mSafeArgs.breedName)
     }
 
     private fun observerLiveData() {
-        mainViewModel.getSubBreeds(safeArgs.breedName).observe(viewLifecycleOwner, Observer { listOfSubBreeds ->
+        mMainViewModel.getSubBreeds(mSafeArgs.breedName).observe(viewLifecycleOwner, Observer { listOfSubBreeds ->
             listOfSubBreeds?.let {
-                allSubBreeds = it.subBreeds
-                subBreedAdapter.swap(it.subBreeds)
-                fragmentWorker.dataReady(true)
+                mAllSubBreeds = it.subBreeds
+                mSubBreedAdapter.swap(it.subBreeds)
+                mFragmentWorker.dataReady(true)
             }
         })
-        mainViewModel.getNetworkStatus().observe(viewLifecycleOwner, Observer{networkStatus ->
+        mMainViewModel.getNetworkStatus().observe(viewLifecycleOwner, Observer{ networkStatus ->
             networkStatus?.let {
-                fragmentWorker.showMessage(getString(R.string.title_network_trouble), it)
+                mFragmentWorker.showMessage(getString(R.string.title_network_trouble), it)
             }
         })
     }
 
     private fun initRecyclerView() {
         recyclerViewSubBreeds.apply {
-            subBreedAdapter = SubBreedAdapter(allSubBreeds, this@SubBreedFragment)
+            mSubBreedAdapter = SubBreedAdapter(mAllSubBreeds, this@SubBreedFragment)
             layoutManager = LinearLayoutManager(this@SubBreedFragment.context)
-            adapter = subBreedAdapter
+            adapter = mSubBreedAdapter
         }
     }
 
     override fun onItemSelected(position: Int, item: String) {
         val navDirection = SubBreedFragmentDirections.actionNavigationSubBreedToNavigationImages(
-            safeArgs.breedName,
+            mSafeArgs.breedName,
             item.toLowerCase()
         )
 

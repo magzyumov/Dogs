@@ -23,11 +23,11 @@ import javax.inject.Inject
 class FavouritesFragment: Fragment(), FavouritesAdapter.Interaction {
 
     @Inject
-    lateinit var mainViewModel: MainViewModel
+    lateinit var mMainViewModel: MainViewModel
 
-    private lateinit var favouritesAdapter: FavouritesAdapter
-    private lateinit var allFavourites: List<FavouritesCount>
-    private lateinit var fragmentWorker: IFragmentWorker
+    private lateinit var mFavouritesAdapter: FavouritesAdapter
+    private lateinit var mAllFavourites: List<FavouritesCount>
+    private lateinit var mFragmentWorker: IFragmentWorker
 
     init {
         App.getComponent().inject(this)
@@ -35,7 +35,7 @@ class FavouritesFragment: Fragment(), FavouritesAdapter.Interaction {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is IFragmentWorker) fragmentWorker = context
+        if (context is IFragmentWorker) mFragmentWorker = context
     }
 
 
@@ -44,40 +44,40 @@ class FavouritesFragment: Fragment(), FavouritesAdapter.Interaction {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        allFavourites = arrayListOf()
+        mAllFavourites = arrayListOf()
         return inflater.inflate(R.layout.fragment_favourites, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        fragmentWorker.changePageTitle(getString(R.string.title_favourites))
-        fragmentWorker.dataReady(false)
+        mFragmentWorker.changePageTitle(getString(R.string.title_favourites))
+        mFragmentWorker.dataReady(false)
 
         initRecyclerView()
         observerLiveData()
     }
 
     private fun observerLiveData() {
-        mainViewModel.getAllFavourite().observe(viewLifecycleOwner, Observer { listOfFavourites ->
+        mMainViewModel.getAllFavourite().observe(viewLifecycleOwner, Observer { listOfFavourites ->
             listOfFavourites?.let {
-                allFavourites = listOfFavourites
-                favouritesAdapter.swap(it)
-                fragmentWorker.dataReady(true)
+                mAllFavourites = listOfFavourites
+                mFavouritesAdapter.swap(it)
+                mFragmentWorker.dataReady(true)
             }
         })
-        mainViewModel.getNetworkStatus().observe(viewLifecycleOwner, Observer{networkStatus ->
+        mMainViewModel.getNetworkStatus().observe(viewLifecycleOwner, Observer{ networkStatus ->
             networkStatus?.let {
-                fragmentWorker.showMessage(getString(R.string.title_network_trouble), it)
+                mFragmentWorker.showMessage(getString(R.string.title_network_trouble), it)
             }
         })
     }
 
     private fun initRecyclerView() {
         recyclerViewFavourites.apply {
-            favouritesAdapter = FavouritesAdapter(allFavourites, this@FavouritesFragment)
+            mFavouritesAdapter = FavouritesAdapter(mAllFavourites, this@FavouritesFragment)
             layoutManager = LinearLayoutManager(this@FavouritesFragment.context)
-            adapter = favouritesAdapter
+            adapter = mFavouritesAdapter
         }
     }
 

@@ -12,7 +12,7 @@ class App: Application() {
         component = generateAppComponent()
     }
 
-    fun generateAppComponent(): AppComponent{
+    private fun generateAppComponent(): AppComponent{
         return DaggerAppComponent
             .builder()
             .appModule(AppModule(this))

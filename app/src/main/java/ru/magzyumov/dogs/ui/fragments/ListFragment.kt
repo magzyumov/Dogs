@@ -25,11 +25,11 @@ import javax.inject.Inject
 class ListFragment: Fragment(), BreedAdapter.Interaction {
 
     @Inject
-    lateinit var mainViewModel: MainViewModel
+    lateinit var mMainViewModel: MainViewModel
 
-    private lateinit var breedAdapter: BreedAdapter
-    private lateinit var allBreeds: List<Breed>
-    private lateinit var fragmentWorker: IFragmentWorker
+    private lateinit var mBreedAdapter: BreedAdapter
+    private lateinit var mAllBreeds: List<Breed>
+    private lateinit var mFragmentWorker: IFragmentWorker
 
     init {
         App.getComponent().inject(this)
@@ -37,7 +37,7 @@ class ListFragment: Fragment(), BreedAdapter.Interaction {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is IFragmentWorker) fragmentWorker = context
+        if (context is IFragmentWorker) mFragmentWorker = context
     }
 
     override fun onCreateView(
@@ -45,15 +45,15 @@ class ListFragment: Fragment(), BreedAdapter.Interaction {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        allBreeds = arrayListOf()
+        mAllBreeds = arrayListOf()
         return inflater.inflate(R.layout.fragment_list, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        fragmentWorker.changePageTitle(getString(R.string.app_name))
-        fragmentWorker.dataReady(false)
+        mFragmentWorker.changePageTitle(getString(R.string.app_name))
+        mFragmentWorker.dataReady(false)
 
         initRecyclerView()
         observerLiveData()
@@ -61,25 +61,25 @@ class ListFragment: Fragment(), BreedAdapter.Interaction {
 
 
     private fun observerLiveData() {
-        mainViewModel.getAllBreeds().observe(viewLifecycleOwner, Observer { listOfBreeds ->
+        mMainViewModel.getAllBreeds().observe(viewLifecycleOwner, Observer { listOfBreeds ->
             listOfBreeds?.let {
-                allBreeds = listOfBreeds
-                breedAdapter.swap(it)
-                fragmentWorker.dataReady(true)
+                mAllBreeds = listOfBreeds
+                mBreedAdapter.swap(it)
+                mFragmentWorker.dataReady(true)
             }
         })
-        mainViewModel.getNetworkStatus().observe(viewLifecycleOwner, Observer{networkStatus ->
+        mMainViewModel.getNetworkStatus().observe(viewLifecycleOwner, Observer{ networkStatus ->
             networkStatus?.let {
-                fragmentWorker.showMessage(getString(R.string.title_network_trouble), it)
+                mFragmentWorker.showMessage(getString(R.string.title_network_trouble), it)
             }
         })
     }
 
     private fun initRecyclerView() {
         recyclerViewBreeds.apply {
-            breedAdapter = BreedAdapter(allBreeds, this@ListFragment)
+            mBreedAdapter = BreedAdapter(mAllBreeds, this@ListFragment)
             layoutManager = LinearLayoutManager(this@ListFragment.context)
-            adapter = breedAdapter
+            adapter = mBreedAdapter
         }
     }
 

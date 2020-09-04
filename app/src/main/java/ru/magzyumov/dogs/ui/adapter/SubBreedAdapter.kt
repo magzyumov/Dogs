@@ -9,7 +9,7 @@ import ru.magzyumov.dogs.R
 import ru.magzyumov.dogs.databinding.ItemSubBreedBinding
 
 class SubBreedAdapter(subBreeds: List<String>,
-                      private val interaction: Interaction): RecyclerView.Adapter<SubBreedAdapter.SubBreedHolder>() {
+                      private val mInteraction: Interaction): RecyclerView.Adapter<SubBreedAdapter.SubBreedHolder>() {
 
     private var mSubBreeds: MutableList<String> = mutableListOf()
 
@@ -20,7 +20,7 @@ class SubBreedAdapter(subBreeds: List<String>,
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SubBreedHolder {
         val inflater: LayoutInflater = LayoutInflater.from(parent.context)
         val binding: ItemSubBreedBinding = DataBindingUtil.inflate(inflater, R.layout.item_sub_breed, parent, false)
-        return SubBreedHolder(binding, interaction)
+        return SubBreedHolder(binding, mInteraction)
     }
 
     override fun getItemCount(): Int = mSubBreeds.size

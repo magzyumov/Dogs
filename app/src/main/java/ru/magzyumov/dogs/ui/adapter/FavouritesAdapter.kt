@@ -11,7 +11,7 @@ import ru.magzyumov.dogs.data.entity.FavouritesEntity.*
 import ru.magzyumov.dogs.ui.adapter.FavouritesAdapter.*
 
 class FavouritesAdapter(favourites: List<FavouritesCount>,
-                        private val interaction: Interaction): RecyclerView.Adapter<FavouritesHolder>() {
+                        private val mInteraction: Interaction): RecyclerView.Adapter<FavouritesHolder>() {
 
     private var mFavourites: MutableList<FavouritesCount> = mutableListOf()
 
@@ -22,7 +22,7 @@ class FavouritesAdapter(favourites: List<FavouritesCount>,
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavouritesHolder {
         val inflater: LayoutInflater = LayoutInflater.from(parent.context)
         val binding: ItemFavouriteBinding = DataBindingUtil.inflate(inflater, R.layout.item_favourite, parent, false)
-        return FavouritesHolder(binding, interaction)
+        return FavouritesHolder(binding, mInteraction)
     }
 
     override fun getItemCount(): Int {

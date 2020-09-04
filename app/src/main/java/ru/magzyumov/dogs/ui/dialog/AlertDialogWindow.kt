@@ -5,21 +5,21 @@ import android.content.DialogInterface
 import androidx.appcompat.app.AlertDialog
 
 class AlertDialogWindow {
-    private var builder: AlertDialog.Builder
-    private var alertDialog: AlertDialog
-    private var negativeButtonListener: DialogInterface.OnClickListener
+    private var mBuilder: AlertDialog.Builder
+    private var mAlertDialog: AlertDialog
+    private var mNegativeButtonListener: DialogInterface.OnClickListener
 
     // Конструктор для Alert c одной кнопкой
     constructor(
         context: Context,
         negativeButtonText: String
     ) {
-        negativeButtonListener =
+        mNegativeButtonListener =
             DialogInterface.OnClickListener { dialog, which -> dialog.dismiss() }
-        builder = AlertDialog.Builder(context)
-        builder.setCancelable(false)
-                .setNegativeButton(negativeButtonText, negativeButtonListener)
-        alertDialog = builder.create()
+        mBuilder = AlertDialog.Builder(context)
+        mBuilder.setCancelable(false)
+                .setNegativeButton(negativeButtonText, mNegativeButtonListener)
+        mAlertDialog = mBuilder.create()
     }
 
     // Конструктор для Alert c двумя кнопками
@@ -29,19 +29,19 @@ class AlertDialogWindow {
         positiveButtonText: String,
         positiveButtonListener: DialogInterface.OnClickListener
     ) {
-        negativeButtonListener =
+        mNegativeButtonListener =
             DialogInterface.OnClickListener { dialog: DialogInterface, which: Int -> dialog.dismiss() }
-        builder = AlertDialog.Builder(context)
-        builder.setCancelable(false)
-            .setNegativeButton(negativeButtonText, negativeButtonListener)
+        mBuilder = AlertDialog.Builder(context)
+        mBuilder.setCancelable(false)
+            .setNegativeButton(negativeButtonText, mNegativeButtonListener)
             .setPositiveButton(positiveButtonText, positiveButtonListener)
-        alertDialog = builder.create()
+        mAlertDialog = mBuilder.create()
     }
 
     // Метод показа Alert с динамичным сообщением
     fun show(title: String, message: String) {
-        alertDialog.setTitle(title)
-        alertDialog.setMessage(message)
-        alertDialog.show()
+        mAlertDialog.setTitle(title)
+        mAlertDialog.setMessage(message)
+        mAlertDialog.show()
     }
 }

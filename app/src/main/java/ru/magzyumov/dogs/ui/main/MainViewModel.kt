@@ -9,46 +9,46 @@ import ru.magzyumov.dogs.repository.DogsRepository
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(
-    private val dogsRepository: DogsRepository
+    private val mDogsRepository: DogsRepository
 ): ViewModel() {
 
     fun insertFavourite(favourite: FavouritesEntity) {
-        dogsRepository.insertFavourite(favourite)
+        mDogsRepository.insertFavourite(favourite)
     }
 
     fun deleteFavouriteByPhoto(photo: String) {
-        dogsRepository.deleteFavouriteByPhoto(photo)
+        mDogsRepository.deleteFavouriteByPhoto(photo)
     }
 
     fun getAllFavourite(): LiveData<List<FavouritesCount>> {
-        return dogsRepository.getAllFavourite()
+        return mDogsRepository.getAllFavourite()
     }
 
     fun getFavouriteImages(breed: String): LiveData<List<String>> {
-        return dogsRepository.getFavouriteImages(breed)
+        return mDogsRepository.getFavouriteImages(breed)
     }
 
     fun getNetworkStatus(): LiveData<String>{
-        return dogsRepository.getNetworkStatus()
+        return mDogsRepository.getNetworkStatus()
     }
 
     fun getAllBreeds(): LiveData<List<Breed>>{
-        dogsRepository.getAllBreeds()
-        return dogsRepository.getListOfBreeds()
+        mDogsRepository.getAllBreeds()
+        return mDogsRepository.getListOfBreeds()
     }
 
     fun getSubBreeds(subBreed: String): LiveData<SubBreeds>{
-        dogsRepository.getSubBreeds(subBreed.toLowerCase())
-        return dogsRepository.getListOfSubBreeds()
+        mDogsRepository.getSubBreeds(subBreed.toLowerCase())
+        return mDogsRepository.getListOfSubBreeds()
     }
 
     fun getImagesForBreed(breed: String): LiveData<BreedImages>{
-        dogsRepository.getImagesForBreed(breed.toLowerCase())
-        return dogsRepository.getListOfImages()
+        mDogsRepository.getImagesForBreed(breed.toLowerCase())
+        return mDogsRepository.getListOfImages()
     }
 
     fun getImagesForBreed(breed: String, subBreed: String): LiveData<BreedImages>{
-        dogsRepository.getImagesForBreed(breed.toLowerCase(), subBreed.toLowerCase())
-        return dogsRepository.getListOfImages()
+        mDogsRepository.getImagesForBreed(breed.toLowerCase(), subBreed.toLowerCase())
+        return mDogsRepository.getListOfImages()
     }
 }

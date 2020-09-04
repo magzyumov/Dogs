@@ -69,8 +69,6 @@ class ImagesFragment: Fragment(), ImageAdapter.Interaction {
         }
     }
 
-
-
     private fun observerLiveData() {
         when(mSafeArgs.subBreedName){
             NULL_SUB_BREED -> {
