@@ -12,6 +12,8 @@ import javax.inject.Singleton
 @Component(modules = [AppModule::class])
 interface AppComponent {
 
+    fun inject(mainActivity: MainActivity)
+
     fun inject(listFragment: ListFragment)
     fun inject(imagesFragment: ImagesFragment)
     fun inject(subBreedFragment: SubBreedFragment)

@@ -24,6 +24,7 @@ class AppModule(private val application: Application) {
         return application
     }
 
+    @Singleton
     @Provides
     fun providesRepository(dogsDao: IDogsDao, dogsRequest: IDogsRequest): DogsRepository {
         return DogsRepository(dogsDao, dogsRequest)

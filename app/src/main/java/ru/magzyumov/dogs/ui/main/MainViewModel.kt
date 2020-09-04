@@ -7,6 +7,8 @@ import ru.magzyumov.dogs.data.entity.FavouritesEntity.*
 import ru.magzyumov.dogs.data.response.BreedsResponse.*
 import ru.magzyumov.dogs.repository.DogsRepository
 import javax.inject.Inject
+import javax.inject.Singleton
+
 
 class MainViewModel @Inject constructor(
     private val mDogsRepository: DogsRepository

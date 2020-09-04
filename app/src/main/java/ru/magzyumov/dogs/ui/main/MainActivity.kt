@@ -3,17 +3,27 @@ package ru.magzyumov.dogs.ui.main
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
+import ru.magzyumov.dogs.App
 import ru.magzyumov.dogs.R
 import ru.magzyumov.dogs.ui.dialog.AlertDialogWindow
+import javax.inject.Inject
 
 class MainActivity: AppCompatActivity(), IFragmentWorker {
     private lateinit var mAlertDialog: AlertDialogWindow
+
+    @Inject
+    lateinit var mMainViewModel: MainViewModel
+
+    init {
+        App.getComponent().inject(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +43,16 @@ class MainActivity: AppCompatActivity(), IFragmentWorker {
         navView.setupWithNavController(navController)
 
         mAlertDialog = AlertDialogWindow(this, getString(R.string.title_understand_button))
+
+        observerLiveData()
+    }
+
+    private fun observerLiveData() {
+        mMainViewModel.getNetworkStatus().observe(this, Observer{ networkStatus ->
+            networkStatus?.let {
+                showMessage(getString(R.string.title_network_trouble), it)
+            }
+        })
     }
 
     override fun changePageTitle(title: String) {

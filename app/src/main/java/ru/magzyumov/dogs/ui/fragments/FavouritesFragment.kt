@@ -66,11 +66,6 @@ class FavouritesFragment: Fragment(), FavouritesAdapter.Interaction {
                 mFragmentWorker.dataReady(true)
             }
         })
-        mMainViewModel.getNetworkStatus().observe(viewLifecycleOwner, Observer{ networkStatus ->
-            networkStatus?.let {
-                mFragmentWorker.showMessage(getString(R.string.title_network_trouble), it)
-            }
-        })
     }
 
     private fun initRecyclerView() {

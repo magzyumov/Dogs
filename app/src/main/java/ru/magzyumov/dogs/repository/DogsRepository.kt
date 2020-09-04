@@ -15,6 +15,8 @@ import ru.magzyumov.dogs.data.response.BreedsResponse
 import ru.magzyumov.dogs.data.response.BreedsResponse.*
 import ru.magzyumov.dogs.util.IDogsRequest
 import javax.inject.Inject
+import javax.inject.Singleton
+
 
 class DogsRepository @Inject constructor(
     private val mDogsDao: IDogsDao,
