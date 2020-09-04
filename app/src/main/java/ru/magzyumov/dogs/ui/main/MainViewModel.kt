@@ -38,17 +38,17 @@ class MainViewModel @Inject constructor(
     }
 
     fun getSubBreeds(subBreed: String): LiveData<SubBreeds>{
-        dogsRepository.getSubBreeds(subBreed)
+        dogsRepository.getSubBreeds(subBreed.toLowerCase())
         return dogsRepository.getListOfSubBreeds()
     }
 
     fun getImagesForBreed(breed: String): LiveData<BreedImages>{
-        dogsRepository.getImagesForBreed(breed)
+        dogsRepository.getImagesForBreed(breed.toLowerCase())
         return dogsRepository.getListOfImages()
     }
 
     fun getImagesForBreed(breed: String, subBreed: String): LiveData<BreedImages>{
-        dogsRepository.getImagesForBreed(breed, subBreed)
+        dogsRepository.getImagesForBreed(breed.toLowerCase(), subBreed.toLowerCase())
         return dogsRepository.getListOfImages()
     }
 }

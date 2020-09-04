@@ -148,12 +148,12 @@ class ImagesFragment: Fragment(), ImageAdapter.Interaction {
     override fun onLikeSelected(position: Int, item: String) {
         when(mSafeArgs.local){
             false -> {
-                mMainViewModel.insertFavourite(FavouritesEntity(breed = mBreedName, picture = item))
-                Snackbar.make(mView, getString(R.string.snake_liked), Snackbar.LENGTH_LONG).show()
+                mMainViewModel.insertFavourite(FavouritesEntity(breed = mBreedName.capitalize(), picture = item))
+                Snackbar.make(mView, getString(R.string.snake_liked), Snackbar.LENGTH_SHORT).show()
             }
             true -> {
                 mMainViewModel.deleteFavouriteByPhoto(item)
-                Snackbar.make(mView, getString(R.string.snake_disliked), Snackbar.LENGTH_LONG).show()
+                Snackbar.make(mView, getString(R.string.snake_disliked), Snackbar.LENGTH_SHORT).show()
             }
         }
     }

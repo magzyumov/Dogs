@@ -86,13 +86,13 @@ class ListFragment: Fragment(), BreedAdapter.Interaction {
     override fun onItemSelected(position: Int, item: Breed) {
         if (item.subBreeds.isEmpty()){
             val navDirection = ListFragmentDirections.actionNavigationListToNavigationImages(
-                item.breed.toLowerCase(),
+                item.breed,
                 NULL_SUB_BREED
             )
             findNavController().navigate(navDirection)
         } else {
             val navDirection =
-                ListFragmentDirections.actionNavigationListToNavigationSubBreed(item.breed.toLowerCase())
+                ListFragmentDirections.actionNavigationListToNavigationSubBreed(item.breed)
             findNavController().navigate(navDirection)
         }
     }
