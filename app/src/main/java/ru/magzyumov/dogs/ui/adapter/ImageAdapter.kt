@@ -92,6 +92,8 @@ class ImageAdapter(images: List<String>,
                 .centerCrop()
                 .fitCenter()
                 .diskCacheStrategy(DiskCacheStrategy.DATA)
+                .placeholder(R.drawable.image_loading)
+                .error(R.drawable.image_error)
                 .into(view)
         }
     }
