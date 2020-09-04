@@ -1,10 +1,9 @@
-package ru.magzyumov.dogs.model.database
+package ru.magzyumov.dogs.data.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import io.reactivex.Single
-import ru.magzyumov.dogs.model.entity.FavouritesCountEntity
-import ru.magzyumov.dogs.model.entity.FavouritesEntity
+import ru.magzyumov.dogs.data.entity.FavouritesEntity
+import ru.magzyumov.dogs.data.entity.FavouritesEntity.*
 
 
 @Dao
@@ -14,7 +13,7 @@ interface IDogsDao {
     fun insertFavourite(favourite: FavouritesEntity): Long
 
     @Query("SELECT breed, COUNT(picture) as count FROM favourites GROUP BY breed")
-    fun getAllFavourite(): LiveData<List<FavouritesCountEntity>>
+    fun getAllFavourite(): LiveData<List<FavouritesCount>>
 
     @Query("SELECT picture FROM favourites WHERE breed = :breed")
     fun getFavouriteImages(breed: String): LiveData<List<String>>

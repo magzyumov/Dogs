@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import ru.magzyumov.dogs.App
 
 import ru.magzyumov.dogs.R
-import ru.magzyumov.dogs.model.entity.FavouritesCountEntity
+import ru.magzyumov.dogs.data.entity.FavouritesEntity.*
 import ru.magzyumov.dogs.ui.adapter.FavouritesAdapter
 import ru.magzyumov.dogs.ui.main.IFragmentWorker
 import ru.magzyumov.dogs.ui.main.MainViewModel
@@ -26,7 +26,7 @@ class FavouritesFragment: Fragment(), FavouritesAdapter.Interaction {
     lateinit var mainViewModel: MainViewModel
 
     private lateinit var favouritesAdapter: FavouritesAdapter
-    private lateinit var allFavourites: List<FavouritesCountEntity>
+    private lateinit var allFavourites: List<FavouritesCount>
     private lateinit var fragmentWorker: IFragmentWorker
 
     init {
@@ -81,7 +81,7 @@ class FavouritesFragment: Fragment(), FavouritesAdapter.Interaction {
         }
     }
 
-    override fun onItemSelected(position: Int, item: FavouritesCountEntity) {
+    override fun onItemSelected(position: Int, item: FavouritesCount) {
         val navDirection =
             FavouritesFragmentDirections.actionNavigationFavouritesToNavigationImages(item.breed, NULL_SUB_BREED, true)
         findNavController().navigate(navDirection)

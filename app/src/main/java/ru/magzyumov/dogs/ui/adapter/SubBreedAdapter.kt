@@ -43,7 +43,7 @@ class SubBreedAdapter(subBreeds: List<String>,
         private val mBinding: ItemSubBreedBinding = binding
 
         fun bind(subBreed: String) {
-            mBinding.subBreed = subBreed
+            mBinding.subBreed = subBreed.capitalize()
             mBinding.executePendingBindings()
             mBinding.root.setOnClickListener{
                 interaction.onItemSelected(adapterPosition, subBreed)

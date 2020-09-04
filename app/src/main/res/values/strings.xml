@@ -10,4 +10,7 @@
     <string name="title_network_trouble">Network trouble</string>
 
     <string name="menu_share">Share</string>
+
+    <string name="snake_liked">Liked</string>
+    <string name="snake_disliked">Disliked</string>
 </resources>

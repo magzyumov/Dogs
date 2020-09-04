@@ -15,7 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import ru.magzyumov.dogs.App
 import ru.magzyumov.dogs.R
-import ru.magzyumov.dogs.model.response.BreedsResponse.*
+import ru.magzyumov.dogs.data.response.BreedsResponse.*
 import ru.magzyumov.dogs.ui.main.IFragmentWorker
 import ru.magzyumov.dogs.ui.main.MainViewModel
 import ru.magzyumov.dogs.util.NULL_SUB_BREED

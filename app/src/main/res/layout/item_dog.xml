@@ -6,7 +6,7 @@
         <import type="android.view.View"/>
         <variable
             name="dog"
-            type="ru.magzyumov.dogs.model.response.BreedsResponse.Breed"/>
+            type="ru.magzyumov.dogs.data.response.BreedsResponse.Breed"/>
     </data>
 
     <androidx.cardview.widget.CardView

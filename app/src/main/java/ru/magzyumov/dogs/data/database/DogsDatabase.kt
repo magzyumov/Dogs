@@ -1,8 +1,8 @@
-package ru.magzyumov.dogs.model.database
+package ru.magzyumov.dogs.data.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import ru.magzyumov.dogs.model.entity.FavouritesEntity
+import ru.magzyumov.dogs.data.entity.FavouritesEntity
 
 
 @Database(entities = [FavouritesEntity::class], version = 1, exportSchema = false)

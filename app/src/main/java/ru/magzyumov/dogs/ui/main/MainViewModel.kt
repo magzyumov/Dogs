@@ -1,14 +1,10 @@
 package ru.magzyumov.dogs.ui.main
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
-import ru.magzyumov.dogs.model.entity.FavouritesCountEntity
-import ru.magzyumov.dogs.model.entity.FavouritesEntity
-import ru.magzyumov.dogs.model.response.BreedsResponse.*
+import ru.magzyumov.dogs.data.entity.FavouritesEntity
+import ru.magzyumov.dogs.data.entity.FavouritesEntity.*
+import ru.magzyumov.dogs.data.response.BreedsResponse.*
 import ru.magzyumov.dogs.repository.DogsRepository
 import javax.inject.Inject
 
@@ -24,7 +20,7 @@ class MainViewModel @Inject constructor(
         dogsRepository.deleteFavouriteByPhoto(photo)
     }
 
-    fun getAllFavourite(): LiveData<List<FavouritesCountEntity>> {
+    fun getAllFavourite(): LiveData<List<FavouritesCount>> {
         return dogsRepository.getAllFavourite()
     }
 

@@ -8,8 +8,8 @@ import dagger.Provides
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import ru.magzyumov.dogs.model.database.DogsDatabase
-import ru.magzyumov.dogs.model.database.IDogsDao
+import ru.magzyumov.dogs.data.database.DogsDatabase
+import ru.magzyumov.dogs.data.database.IDogsDao
 import ru.magzyumov.dogs.repository.DogsRepository
 import ru.magzyumov.dogs.ui.main.MainViewModel
 import ru.magzyumov.dogs.util.IDogsRequest

@@ -4,18 +4,16 @@ package ru.magzyumov.dogs.ui.fragments
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
-import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_images.*
 import ru.magzyumov.dogs.App
 import ru.magzyumov.dogs.R
-import ru.magzyumov.dogs.model.entity.FavouritesEntity
+import ru.magzyumov.dogs.data.entity.FavouritesEntity
 import ru.magzyumov.dogs.ui.adapter.ImageAdapter
 import ru.magzyumov.dogs.ui.main.IFragmentWorker
 import ru.magzyumov.dogs.ui.main.MainViewModel
@@ -26,13 +24,14 @@ import javax.inject.Inject
 class ImagesFragment: Fragment(), ImageAdapter.Interaction {
 
     @Inject
-    lateinit var mainViewModel: MainViewModel
+    lateinit var mMainViewModel: MainViewModel
 
-    private lateinit var imageAdapter: ImageAdapter
-    private lateinit var allImages: List<String>
-    private lateinit var safeArgs: ImagesFragmentArgs
-    private lateinit var fragmentWorker: IFragmentWorker
-    private lateinit var breedName: String
+    private lateinit var mImageAdapter: ImageAdapter
+    private lateinit var mAllImages: List<String>
+    private lateinit var mSafeArgs: ImagesFragmentArgs
+    private lateinit var mFragmentWorker: IFragmentWorker
+    private lateinit var mBreedName: String
+    private lateinit var mView: View
 
     init {
         App.getComponent().inject(this)
@@ -40,7 +39,7 @@ class ImagesFragment: Fragment(), ImageAdapter.Interaction {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is IFragmentWorker) fragmentWorker = context
+        if (context is IFragmentWorker) mFragmentWorker = context
     }
 
     override fun onCreateView(
@@ -49,14 +48,15 @@ class ImagesFragment: Fragment(), ImageAdapter.Interaction {
         savedInstanceState: Bundle?
     ): View? {
         setHasOptionsMenu(true)
-        allImages = arrayListOf()
-        return inflater.inflate(R.layout.fragment_images, container, false)
+        mAllImages = arrayListOf()
+        mView = inflater.inflate(R.layout.fragment_images, container, false)
+        return mView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        fragmentWorker.dataReady(false)
+        mFragmentWorker.dataReady(false)
 
         prepareArguments()
         initRecyclerView()
@@ -65,84 +65,95 @@ class ImagesFragment: Fragment(), ImageAdapter.Interaction {
 
     private fun prepareArguments() {
         arguments?.let {
-            safeArgs = ImagesFragmentArgs.fromBundle(it)
+            mSafeArgs = ImagesFragmentArgs.fromBundle(it)
         }
     }
 
+
+
     private fun observerLiveData() {
-        when(safeArgs.subBreedName){
+        when(mSafeArgs.subBreedName){
             NULL_SUB_BREED -> {
-                when(safeArgs.local){
-                    false -> {
-                        mainViewModel.getImagesForBreed(safeArgs.breedName).observe(
-                            viewLifecycleOwner,
-                            Observer { listOfImages ->
-                                listOfImages?.let {
-                                    allImages = it.images
-                                    imageAdapter.swap(it.images)
-                                    fragmentWorker.dataReady(true)
-                                }
-                            })
-                        breedName = safeArgs.breedName
-                        fragmentWorker.changePageTitle(breedName)
-                    }
-                    true -> {
-                        mainViewModel.getFavouriteImages(safeArgs.breedName).observe(
-                            viewLifecycleOwner,
-                            Observer { listOfImages ->
-                                listOfImages?.let {
-                                    allImages = it
-                                    imageAdapter.swap(it)
-                                    fragmentWorker.dataReady(true)
-                                }
-                            })
-                        breedName = safeArgs.breedName
-                        fragmentWorker.changePageTitle(breedName)
+                when(mSafeArgs.local){
+                    false -> { observeBreedImages (mSafeArgs.breedName) }
+                    true -> { observeLocalImages(mSafeArgs.breedName)
                     }
                 }
             }
-            else -> {
-                mainViewModel.getImagesForBreed(safeArgs.breedName, safeArgs.subBreedName).observe(
-                    viewLifecycleOwner,
-                    Observer { listOfImages ->
-                        listOfImages?.let {
-                            allImages = it.images
-                            imageAdapter.swap(it.images)
-                            fragmentWorker.dataReady(true)
-                        }
-                    })
-                breedName = safeArgs.subBreedName
-                fragmentWorker.changePageTitle(breedName)
-            }
+            else -> { observeSubBreedImages(mSafeArgs.breedName, mSafeArgs.subBreedName) }
         }
-        mainViewModel.getNetworkStatus().observe(viewLifecycleOwner, Observer { networkStatus ->
+        mMainViewModel.getNetworkStatus().observe(viewLifecycleOwner, Observer { networkStatus ->
             networkStatus?.let {
-                fragmentWorker.showMessage(getString(R.string.title_network_trouble), it)
+                mFragmentWorker.showMessage(getString(R.string.title_network_trouble), it)
             }
         })
     }
 
+    private fun observeBreedImages(breed: String){
+        mMainViewModel.getImagesForBreed(breed).observe(
+            viewLifecycleOwner,
+            Observer { listOfImages ->
+                listOfImages?.let {
+                    mAllImages = it.images
+                    mImageAdapter.swap(it.images)
+                    mFragmentWorker.dataReady(true)
+                }
+            })
+        mBreedName = mSafeArgs.breedName
+        mFragmentWorker.changePageTitle(mBreedName)
+    }
+
+    private fun observeSubBreedImages(breed: String, subBreed: String){
+        mMainViewModel.getImagesForBreed(breed, subBreed).observe(
+            viewLifecycleOwner,
+            Observer { listOfImages ->
+                listOfImages?.let {
+                    mAllImages = it.images
+                    mImageAdapter.swap(it.images)
+                    mFragmentWorker.dataReady(true)
+                }
+            })
+        mBreedName = mSafeArgs.subBreedName
+        mFragmentWorker.changePageTitle(mBreedName)
+    }
+
+    private fun observeLocalImages(breed: String){
+        mMainViewModel.getFavouriteImages(breed).observe(
+            viewLifecycleOwner,
+            Observer { listOfImages ->
+                listOfImages?.let {
+                    mAllImages = it
+                    mImageAdapter.swap(it)
+                    mFragmentWorker.dataReady(true)
+                }
+            })
+        mBreedName = mSafeArgs.breedName
+        mFragmentWorker.changePageTitle(mBreedName)
+    }
+
     private fun initRecyclerView() {
         recyclerViewImages.apply {
-            imageAdapter = ImageAdapter(allImages, this@ImagesFragment)
+            mImageAdapter = ImageAdapter(mAllImages, this@ImagesFragment)
             layoutManager = LinearLayoutManager(
                 this@ImagesFragment.context,
                 LinearLayoutManager.HORIZONTAL,
                 false
             )
-            adapter = imageAdapter
+            adapter = mImageAdapter
         }
         val snapHelper = PagerSnapHelper()
         snapHelper.attachToRecyclerView(recyclerViewImages)
     }
 
     override fun onLikeSelected(position: Int, item: String) {
-        when(safeArgs.local){
+        when(mSafeArgs.local){
             false -> {
-                mainViewModel.insertFavourite(FavouritesEntity(breed = breedName, picture = item))
+                mMainViewModel.insertFavourite(FavouritesEntity(breed = mBreedName, picture = item))
+                Snackbar.make(mView, getString(R.string.snake_liked), Snackbar.LENGTH_LONG).show()
             }
             true -> {
-                mainViewModel.deleteFavouriteByPhoto(item)
+                mMainViewModel.deleteFavouriteByPhoto(item)
+                Snackbar.make(mView, getString(R.string.snake_disliked), Snackbar.LENGTH_LONG).show()
             }
         }
     }

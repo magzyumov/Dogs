@@ -1,6 +1,5 @@
 package ru.magzyumov.dogs.repository
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -10,11 +9,11 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import ru.magzyumov.dogs.model.database.IDogsDao
-import ru.magzyumov.dogs.model.entity.FavouritesCountEntity
-import ru.magzyumov.dogs.model.entity.FavouritesEntity
-import ru.magzyumov.dogs.model.response.BreedsResponse
-import ru.magzyumov.dogs.model.response.BreedsResponse.*
+import ru.magzyumov.dogs.data.database.IDogsDao
+import ru.magzyumov.dogs.data.entity.FavouritesEntity
+import ru.magzyumov.dogs.data.entity.FavouritesEntity.*
+import ru.magzyumov.dogs.data.response.BreedsResponse
+import ru.magzyumov.dogs.data.response.BreedsResponse.*
 import ru.magzyumov.dogs.util.IDogsRequest
 import javax.inject.Inject
 
@@ -46,7 +45,7 @@ class DogsRepository @Inject constructor(
         }
     }
 
-    fun getAllFavourite(): LiveData<List<FavouritesCountEntity>> {
+    fun getAllFavourite(): LiveData<List<FavouritesCount>> {
         return dogsDao.getAllFavourite()
     }
 

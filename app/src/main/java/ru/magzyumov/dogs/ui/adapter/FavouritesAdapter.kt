@@ -7,13 +7,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ru.magzyumov.dogs.R
 import ru.magzyumov.dogs.databinding.ItemFavouriteBinding
-import ru.magzyumov.dogs.model.entity.FavouritesCountEntity
+import ru.magzyumov.dogs.data.entity.FavouritesEntity.*
 import ru.magzyumov.dogs.ui.adapter.FavouritesAdapter.*
 
-class FavouritesAdapter(favourites: List<FavouritesCountEntity>,
+class FavouritesAdapter(favourites: List<FavouritesCount>,
                         private val interaction: Interaction): RecyclerView.Adapter<FavouritesHolder>() {
 
-    private var mFavourites: MutableList<FavouritesCountEntity> = mutableListOf()
+    private var mFavourites: MutableList<FavouritesCount> = mutableListOf()
 
     init {
         mFavourites.addAll(favourites)
@@ -33,7 +33,7 @@ class FavouritesAdapter(favourites: List<FavouritesCountEntity>,
         holder.bind(favourite = mFavourites[position])
     }
 
-    fun swap(favourites: List<FavouritesCountEntity>) {
+    fun swap(favourites: List<FavouritesCount>) {
         val diffCallback = DiffCallback(mFavourites, favourites)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
 
@@ -46,7 +46,7 @@ class FavouritesAdapter(favourites: List<FavouritesCountEntity>,
                        private val interaction: Interaction): RecyclerView.ViewHolder(binding.root) {
         private val mBinding: ItemFavouriteBinding = binding
 
-        fun bind(favourite: FavouritesCountEntity) {
+        fun bind(favourite: FavouritesCount) {
             mBinding.favourite = favourite
             mBinding.executePendingBindings()
             mBinding.root.setOnClickListener{
@@ -56,8 +56,8 @@ class FavouritesAdapter(favourites: List<FavouritesCountEntity>,
     }
 
     class DiffCallback(
-        private val oldList: List<FavouritesCountEntity>,
-        private val newList: List<FavouritesCountEntity>
+        private val oldList: List<FavouritesCount>,
+        private val newList: List<FavouritesCount>
     ): DiffUtil.Callback() {
 
         override fun getOldListSize() = oldList.size
@@ -75,6 +75,6 @@ class FavouritesAdapter(favourites: List<FavouritesCountEntity>,
     }
 
     interface Interaction {
-        fun onItemSelected(position: Int, item: FavouritesCountEntity)
+        fun onItemSelected(position: Int, item: FavouritesCount)
     }
 }

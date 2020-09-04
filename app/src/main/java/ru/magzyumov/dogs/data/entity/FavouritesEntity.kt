@@ -1,4 +1,4 @@
-package ru.magzyumov.dogs.model.entity
+package ru.magzyumov.dogs.data.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -13,7 +13,7 @@ class FavouritesEntity(
     @PrimaryKey
     @ColumnInfo(name = "picture")
     var picture: String,
-
     ) {
 
+    class FavouritesCount(var breed: String, var count: Int)
 }

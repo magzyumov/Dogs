@@ -1,4 +1,4 @@
-package ru.magzyumov.dogs.model.response
+package ru.magzyumov.dogs.data.response
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName

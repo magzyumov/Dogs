@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ru.magzyumov.dogs.R
 import ru.magzyumov.dogs.databinding.ItemDogBinding
-import ru.magzyumov.dogs.model.response.BreedsResponse.*
+import ru.magzyumov.dogs.data.response.BreedsResponse.*
 import ru.magzyumov.dogs.ui.adapter.BreedAdapter.*
 
 class BreedAdapter(dogs: List<Breed>,
