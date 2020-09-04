@@ -131,7 +131,7 @@ class ImagesFragment: Fragment(), ImageAdapter.Interaction {
 
     private fun initRecyclerView() {
         recyclerViewImages.apply {
-            mImageAdapter = ImageAdapter(mAllImages, this@ImagesFragment)
+            mImageAdapter = ImageAdapter(mAllImages, mSafeArgs.local,this@ImagesFragment)
             layoutManager = LinearLayoutManager(
                 this@ImagesFragment.context,
                 LinearLayoutManager.HORIZONTAL,

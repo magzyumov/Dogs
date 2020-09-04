@@ -4,6 +4,9 @@
     xmlns:tool="http://schemas.android.com/tools">
     <data>
         <variable
+            name="local"
+            type="Boolean"/>
+        <variable
             name="image"
             type="String"/>
     </data>
@@ -40,7 +43,7 @@
                     android:layout_weight="0.5"
                     android:layout_margin="5dp"
                     android:layout_gravity="end"
-                    android:src="@drawable/ic_favorite_24dp"/>
+                    android:src="@{local ? @drawable/ic_dislike : @drawable/ic_like}"/>
 
                 <ImageView
                     android:id="@+id/buttonShare"

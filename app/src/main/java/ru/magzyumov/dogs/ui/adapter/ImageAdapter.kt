@@ -15,6 +15,7 @@ import ru.magzyumov.dogs.databinding.ItemImageBinding
 
 
 class ImageAdapter(images: List<String>,
+                   private val local: Boolean,
                    private val mInteraction: Interaction): RecyclerView.Adapter<ImageAdapter.ImageHolder>() {
 
     private var mImages: MutableList<String> = mutableListOf()
@@ -32,7 +33,7 @@ class ImageAdapter(images: List<String>,
     override fun getItemCount(): Int = mImages.size
 
     override fun onBindViewHolder(holder: ImageHolder, position: Int) {
-        holder.bind(mImages[position])
+        holder.bind(mImages[position], local)
     }
 
     fun swap(images: List<String>) {
@@ -48,8 +49,9 @@ class ImageAdapter(images: List<String>,
                       private val interaction: Interaction): RecyclerView.ViewHolder(binding.root) {
         private val mBinding: ItemImageBinding = binding
 
-        fun bind(image: String) {
+        fun bind(image: String, local: Boolean) {
             mBinding.image = image
+            mBinding.local = local
             mBinding.executePendingBindings()
             mBinding.root.buttonShare.setOnClickListener{
                 interaction.onShareSelected(image)
