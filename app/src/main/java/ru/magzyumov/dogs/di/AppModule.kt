@@ -11,6 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import ru.magzyumov.dogs.data.database.DogsDatabase
 import ru.magzyumov.dogs.data.database.IDogsDao
 import ru.magzyumov.dogs.repository.DogsRepository
+import ru.magzyumov.dogs.repository.IDogsRepository
 import ru.magzyumov.dogs.ui.main.MainViewModel
 import ru.magzyumov.dogs.util.IDogsRequest
 import javax.inject.Singleton
@@ -26,15 +27,14 @@ class AppModule(private val application: Application) {
 
     @Singleton
     @Provides
-    fun providesRepository(dogsDao: IDogsDao, dogsRequest: IDogsRequest): DogsRepository {
+    fun providesRepository(dogsDao: IDogsDao, dogsRequest: IDogsRequest): IDogsRepository {
         return DogsRepository(dogsDao, dogsRequest)
     }
 
     @Provides
-    fun providesViewModel(dogsRepository: DogsRepository): MainViewModel {
+    fun providesViewModel(dogsRepository: IDogsRepository): MainViewModel {
         return MainViewModel(dogsRepository)
     }
-
 
     @Singleton
     @Provides

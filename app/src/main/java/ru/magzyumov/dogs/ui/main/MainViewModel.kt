@@ -5,13 +5,13 @@ import androidx.lifecycle.ViewModel
 import ru.magzyumov.dogs.data.entity.FavouritesEntity
 import ru.magzyumov.dogs.data.entity.FavouritesEntity.*
 import ru.magzyumov.dogs.data.response.BreedsResponse.*
-import ru.magzyumov.dogs.repository.DogsRepository
+import ru.magzyumov.dogs.repository.IDogsRepository
 import javax.inject.Inject
-import javax.inject.Singleton
 
 
-class MainViewModel @Inject constructor(
-    private val mDogsRepository: DogsRepository
+class MainViewModel
+@Inject constructor(
+    private val mDogsRepository: IDogsRepository
 ): ViewModel() {
 
     fun insertFavourite(favourite: FavouritesEntity) {

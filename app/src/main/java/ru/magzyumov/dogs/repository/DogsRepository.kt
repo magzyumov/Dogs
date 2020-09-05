@@ -15,44 +15,43 @@ import ru.magzyumov.dogs.data.response.BreedsResponse
 import ru.magzyumov.dogs.data.response.BreedsResponse.*
 import ru.magzyumov.dogs.util.IDogsRequest
 import javax.inject.Inject
-import javax.inject.Singleton
 
 
 class DogsRepository @Inject constructor(
     private val mDogsDao: IDogsDao,
     private val mDogsRequest: IDogsRequest
-){
+): IDogsRepository{
     private val mNetWorkStatusLiveData: MutableLiveData<String> = MutableLiveData()
     private val mListOfBreedsLiveData: MutableLiveData<List<Breed>> = MutableLiveData()
     private val mListOfSubBreedsLiveData: MutableLiveData<SubBreeds> = MutableLiveData()
     private val mListOfImagesLiveData: MutableLiveData<BreedImages> = MutableLiveData()
 
-    fun getNetworkStatus(): LiveData<String> = mNetWorkStatusLiveData
-    fun getListOfBreeds(): LiveData<List<Breed>> = mListOfBreedsLiveData
-    fun getListOfSubBreeds(): LiveData<SubBreeds> = mListOfSubBreedsLiveData
-    fun getListOfImages(): LiveData<BreedImages> = mListOfImagesLiveData
+    override fun getNetworkStatus(): LiveData<String> = mNetWorkStatusLiveData
+    override fun getListOfBreeds(): LiveData<List<Breed>> = mListOfBreedsLiveData
+    override fun getListOfSubBreeds(): LiveData<SubBreeds> = mListOfSubBreedsLiveData
+    override fun getListOfImages(): LiveData<BreedImages> = mListOfImagesLiveData
 
-    fun insertFavourite(favourite: FavouritesEntity) {
+    override fun insertFavourite(favourite: FavouritesEntity) {
         CoroutineScope(Dispatchers.IO).launch {
             mDogsDao.insertFavourite(favourite)
         }
     }
 
-    fun deleteFavouriteByPhoto(photo: String) {
+    override fun deleteFavouriteByPhoto(photo: String) {
         CoroutineScope(Dispatchers.IO).launch {
             mDogsDao.deleteFavouriteByPhoto(photo)
         }
     }
 
-    fun getAllFavourite(): LiveData<List<FavouritesCount>> {
+    override fun getAllFavourite(): LiveData<List<FavouritesCount>> {
         return mDogsDao.getAllFavourite()
     }
 
-    fun getFavouriteImages(breed: String): LiveData<List<String>> {
+    override fun getFavouriteImages(breed: String): LiveData<List<String>> {
         return mDogsDao.getFavouriteImages(breed)
     }
 
-    fun getAllBreeds() {
+    override fun getAllBreeds() {
         mDogsRequest.getAllBreedsFromServer()
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.computation())
@@ -92,7 +91,7 @@ class DogsRepository @Inject constructor(
         }
 
 
-    fun getSubBreeds(subBreed: String) {
+    override fun getSubBreeds(subBreed: String) {
         mDogsRequest.getSubBreedsFromServer(subBreed)
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.computation())
@@ -122,7 +121,7 @@ class DogsRepository @Inject constructor(
         }
 
 
-    fun getImagesForBreed(breed: String) {
+    override fun getImagesForBreed(breed: String) {
         mDogsRequest.getImagesForBreed(breed)
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.computation())
@@ -138,7 +137,7 @@ class DogsRepository @Inject constructor(
             })
     }
 
-    fun getImagesForBreed(breed: String, subBreed: String){
+    override fun getImagesForBreed(breed: String, subBreed: String){
         mDogsRequest.getImagesForBreed(breed, subBreed)
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.computation())
